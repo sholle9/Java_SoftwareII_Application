@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AddCustomer">
+   <children>
+      <TitledPane alignment="CENTER" animated="false" collapsible="false" prefHeight="26.0" prefWidth="601.0" text="Add New Customer">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
+      </TitledPane>
+      <SplitPane dividerPositions="0.5025041736227045" layoutY="26.0" prefHeight="374.0" prefWidth="601.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="22.0" prefHeight="17.0" prefWidth="75.0" text="Customer ID" />
+                  <TextField layoutX="89.0" layoutY="18.0" />
+               </children></AnchorPane>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <ButtonBar layoutX="101.0" layoutY="318.0" prefHeight="40.0" prefWidth="172.0">
+                    <buttons>
+                        <Button mnemonicParsing="false" text="Save" />
+                        <Button mnemonicParsing="false" text="Cancel" />
+                    </buttons>
+                  </ButtonBar>
+                  <TableView layoutX="7.0" layoutY="14.0" prefHeight="284.0" prefWidth="282.0">
+                    <columns>
+                      <TableColumn prefWidth="101.0" text="Customer ID" />
+                      <TableColumn prefWidth="92.0" text="Last Name" />
+                        <TableColumn prefWidth="88.0" text="First Name" />
+                    </columns>
+                  </TableView>
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+   </children>
+</AnchorPane>
