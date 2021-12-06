@@ -3,20 +3,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0" prefWidth="735.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="735.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <SplitPane layoutY="28.0" prefHeight="438.0" prefWidth="735.0">
+      <SplitPane layoutY="28.0" prefHeight="562.0" prefWidth="735.0">
         <items>
-          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="550.0" prefWidth="733.0">
                <children>
-                  <ButtonBar layoutX="454.0" layoutY="386.0" prefHeight="40.0" prefWidth="200.0">
+                  <ButtonBar layoutX="519.0" layoutY="513.0" prefHeight="40.0" prefWidth="200.0">
                     <buttons>
                       <Button mnemonicParsing="false" text="Add" />
                         <Button mnemonicParsing="false" text="Update" />
-                        <Button mnemonicParsing="false" text="Cancel" />
                     </buttons>
                   </ButtonBar>
-                  <TableView layoutX="4.0" layoutY="46.0" prefHeight="344.0" prefWidth="725.0">
+                  <TableView layoutX="4.0" layoutY="46.0" prefHeight="196.0" prefWidth="725.0">
                      <columns>
                         <TableColumn prefWidth="102.0" text="Appointment ID" />
                         <TableColumn prefWidth="48.0" text="Title" />
@@ -32,6 +31,27 @@
                   </TableView>
                   <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="98.0" text="Weekly View" />
                   <RadioButton layoutX="122.0" layoutY="14.0" mnemonicParsing="false" text="Monthly View" />
+                  <TableView layoutX="4.0" layoutY="317.0" prefHeight="196.0" prefWidth="725.0">
+                     <columns>
+                        <TableColumn prefWidth="87.0" text="Customer ID" />
+                        <TableColumn prefWidth="82.0" text="Last Name" />
+                        <TableColumn prefWidth="78.0" text="First Name" />
+                        <TableColumn prefWidth="68.0" text="Address" />
+                        <TableColumn prefWidth="55.0" text="City" />
+                        <TableColumn prefWidth="106.0" text="State/Providence" />
+                        <TableColumn prefWidth="75.0" text="Country" />
+                        <TableColumn prefWidth="76.0" text="Postal Code" />
+                        <TableColumn prefWidth="97.0" text="Phone Number" />
+                     </columns>
+                  </TableView>
+                  <ButtonBar layoutX="454.0" layoutY="242.0" prefHeight="40.0" prefWidth="265.0">
+                     <buttons>
+                        <Button mnemonicParsing="false" text="Add" />
+                        <Button mnemonicParsing="false" text="Update" />
+                     </buttons>
+                  </ButtonBar>
+                  <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutX="-1.0" layoutY="290.0" prefHeight="27.0" prefWidth="735.0" text="Contacts" />
+                  <Button layoutX="646.0" layoutY="10.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="75.0" text="Logout" />
                </children>
             </AnchorPane>
         </items>

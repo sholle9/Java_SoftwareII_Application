@@ -36,8 +36,8 @@
       <TextField layoutX="138.0" layoutY="431.0" />
       <ButtonBar layoutX="336.0" layoutY="501.0" prefHeight="40.0" prefWidth="200.0">
         <buttons>
-          <Button mnemonicParsing="false" text="Save" />
-            <Button mnemonicParsing="false" text="Delete" />
+          <Button mnemonicParsing="false" text="Delete" />
+            <Button mnemonicParsing="false" text="Save" />
             <Button mnemonicParsing="false" text="Cancel" />
         </buttons>
       </ButtonBar>
