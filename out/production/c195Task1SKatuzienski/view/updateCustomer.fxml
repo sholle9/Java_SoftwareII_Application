@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane prefHeight="484.0" prefWidth="481.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.AddAppointment">
+   <children>
+      <TitledPane alignment="CENTER" animated="false" collapsible="false" prefHeight="26.0" prefWidth="480.0" text="Update Existing Customer">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
+      </TitledPane>
+      <Label layoutX="36.0" layoutY="59.0" prefHeight="17.0" prefWidth="96.0" text="Customer ID" />
+      <Label layoutX="36.0" layoutY="93.0" prefHeight="17.0" prefWidth="96.0" text="First Name" />
+      <Label layoutX="36.0" layoutY="127.0" prefHeight="17.0" prefWidth="96.0" text="Last Name" />
+      <Label layoutX="36.0" layoutY="165.0" prefHeight="17.0" prefWidth="96.0" text="Address" />
+      <Label layoutX="36.0" layoutY="222.0" prefHeight="17.0" prefWidth="96.0" text="City" />
+      <Label layoutX="36.0" layoutY="261.0" prefHeight="17.0" prefWidth="96.0" text="State/ Providence" />
+      <Label layoutX="36.0" layoutY="302.0" prefHeight="17.0" prefWidth="96.0" text="Country" />
+      <Label layoutX="36.0" layoutY="342.0" prefHeight="17.0" prefWidth="96.0" text="Postal Code" />
+      <Label layoutX="36.0" layoutY="381.0" prefHeight="17.0" prefWidth="96.0" text="Phone Number" />
+      <TextField layoutX="137.0" layoutY="55.0" prefHeight="25.0" prefWidth="150.0" />
+      <TextField layoutX="137.0" layoutY="89.0" prefHeight="25.0" prefWidth="150.0" />
+      <TextField layoutX="137.0" layoutY="123.0" prefHeight="25.0" prefWidth="150.0" />
+      <TextField layoutX="139.0" layoutY="218.0" prefHeight="25.0" prefWidth="150.0" />
+      <ComboBox layoutX="139.0" layoutY="257.0" prefWidth="150.0" />
+      <ComboBox layoutX="139.0" layoutY="298.0" prefWidth="150.0" />
+      <TextField layoutX="139.0" layoutY="338.0" prefHeight="25.0" prefWidth="150.0" />
+      <TextField layoutX="139.0" layoutY="377.0" prefHeight="25.0" prefWidth="150.0" />
+      <ButtonBar layoutX="215.0" layoutY="430.0" prefHeight="40.0" prefWidth="200.0">
+        <buttons>
+          <Button mnemonicParsing="false" text="Delete" />
+            <Button mnemonicParsing="false" text="Save" />
+            <Button mnemonicParsing="false" text="Cancel" />
+        </buttons>
+      </ButtonBar>
+      <TextArea layoutX="137.0" layoutY="157.0" prefHeight="51.0" prefWidth="227.0" />
+   </children>
+</AnchorPane>
