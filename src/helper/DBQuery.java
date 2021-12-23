@@ -1,19 +1,21 @@
 package helper;
 
 import java.sql.Connection;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
 
 public class DBQuery {
-    private static Statement statement; // Statement reference
+    private static PreparedStatement statement; // Statement reference
 
-    //Create statement object
-    public static void setStatement(Connection conn) throws SQLException {
-        statement = conn.createStatement();
+    //Create PreparedStatement
+    public static void setPreparedStatement(Connection conn, String sqlStatement) throws SQLException {
+        statement = conn.prepareStatement(sqlStatement);
     }
 
     //Return statement object
-    public static Statement getStatement(){
+    public static PreparedStatement getPreparedStatement(){
+
         return statement;
     }
 }
