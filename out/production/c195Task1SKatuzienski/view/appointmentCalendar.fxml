@@ -41,16 +41,18 @@
                         <ToggleGroup fx:id="calendarViewTg" />
                      </toggleGroup></RadioButton>
                   <RadioButton fx:id="monthlyViewRBtn" layoutX="122.0" layoutY="14.0" mnemonicParsing="false" text="Monthly View" toggleGroup="$calendarViewTg" />
-                  <TableView fx:id="contactsTableView" layoutX="4.0" layoutY="317.0" prefHeight="196.0" prefWidth="725.0">
+                  <TableView fx:id="customerTableView" layoutX="4.0" layoutY="317.0" prefHeight="196.0" prefWidth="725.0">
                      <columns>
-                        <TableColumn fx:id="lastNameCol" prefWidth="82.0" text="Last Name" />
-                        <TableColumn fx:id="firstNameCol" prefWidth="78.0" text="First Name" />
-                        <TableColumn fx:id="addressCol" prefWidth="68.0" text="Address" />
-                        <TableColumn fx:id="cityCol" prefWidth="55.0" text="City" />
-                        <TableColumn fx:id="stateProvCol" prefWidth="106.0" text="State/Providence" />
-                        <TableColumn fx:id="countryCol" prefWidth="75.0" text="Country" />
-                        <TableColumn fx:id="postalCodeCol" prefWidth="76.0" text="Postal Code" />
-                        <TableColumn fx:id="phoneNumberCol" prefWidth="97.0" text="Phone Number" />
+                        <TableColumn fx:id="customerIdCol" prefWidth="77.0" text="Customer ID" />
+                        <TableColumn fx:id="customerNameCol" prefWidth="97.0" text="Customer Name" />
+                        <TableColumn fx:id="addressCol" prefWidth="66.0" text="Address" />
+                        <TableColumn fx:id="postalCodeCol" minWidth="4.0" prefWidth="71.0" text="Postal Code" />
+                        <TableColumn fx:id="phoneNumberCol" prefWidth="75.0" text="Phone Number" />
+                        <TableColumn fx:id="createDateCol" prefWidth="78.0" text="Create Date" />
+                        <TableColumn fx:id="createdByCol" minWidth="0.0" prefWidth="82.0" text="Created By" />
+                        <TableColumn fx:id="lastUpdateCol" prefWidth="83.0" text="Last Update" />
+                        <TableColumn fx:id="lastUpdatedByCol" prefWidth="104.0" text="Last Updated By" />
+                        <TableColumn fx:id="divisionIdCol" prefWidth="66.0" text="Division ID" />
                      </columns>
                   </TableView>
                   <ButtonBar layoutX="454.0" layoutY="242.0" prefHeight="40.0" prefWidth="265.0">
@@ -59,7 +61,7 @@
                         <Button mnemonicParsing="false" onAction="#onActionUpdateAppointment" text="Update" />
                      </buttons>
                   </ButtonBar>
-                  <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutX="-1.0" layoutY="290.0" prefHeight="27.0" prefWidth="735.0" text="Contacts" />
+                  <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutX="-1.0" layoutY="290.0" prefHeight="27.0" prefWidth="735.0" text="Customer" />
                   <Button layoutX="646.0" layoutY="10.0" mnemonicParsing="false" onAction="#onActionLogout" prefHeight="25.0" prefWidth="75.0" text="Logout" />
                </children>
             </AnchorPane>

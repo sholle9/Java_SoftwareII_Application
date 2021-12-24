@@ -5,13 +5,10 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 import helper.DBQuery;
 import helper.JDBC;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -27,9 +24,7 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.appointments;
-
-import javax.security.auth.callback.Callback;
-import javax.swing.table.DefaultTableModel;
+import model.customers;
 
 public class appointmentCalendarController implements Initializable {
 
@@ -80,31 +75,37 @@ public class appointmentCalendarController implements Initializable {
     private RadioButton monthlyViewRBtn;
 
     @FXML
-    private TableView<?> contactsTableView;
+    private TableView<customers> customerTableView;
 
     @FXML
-    private TableColumn<?, ?> lastNameCol;
+    private TableColumn<?, ?> customerIdCol;
 
     @FXML
-    private TableColumn<?, ?> firstNameCol;
+    private TableColumn<?, ?> customerNameCol;
 
     @FXML
     private TableColumn<?, ?> addressCol;
-
-    @FXML
-    private TableColumn<?, ?> cityCol;
-
-    @FXML
-    private TableColumn<?, ?> stateProvCol;
-
-    @FXML
-    private TableColumn<?, ?> countryCol;
 
     @FXML
     private TableColumn<?, ?> postalCodeCol;
 
     @FXML
     private TableColumn<?, ?> phoneNumberCol;
+
+    @FXML
+    private TableColumn<?, ?> createDateCol;
+
+    @FXML
+    private TableColumn<?, ?> createdByCol;
+
+    @FXML
+    private TableColumn<?, ?> lastUpdateCol;
+
+    @FXML
+    private TableColumn<?, ?> lastUpdatedByCol;
+
+    @FXML
+    private TableColumn<?, ?> divisionIdCol;
 
     Stage stage;
     Parent scene;
@@ -158,23 +159,23 @@ public class appointmentCalendarController implements Initializable {
         stage.show();
 
     }
-
+    //Observable list method for getting the data from the database for the GUI appointment table
     public ObservableList<appointments> appointmentList(){
         ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
         try {
-            Connection conn = JDBC.getConnection();
-            String selectAppointments = "SELECT * FROM appointments";
+            Connection conn = JDBC.getConnection();//Gets connection to database
+            String selectAppointments = "SELECT * FROM appointments";//Select statement
 
-            DBQuery.setPreparedStatement(conn, selectAppointments);
-            PreparedStatement ps = DBQuery.getPreparedStatement();
+            DBQuery.setPreparedStatement(conn, selectAppointments);//sets prepared statement to be the select statement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
 
-            ps.execute();
+            ps.execute();//executes the prepared statement
 
-            ResultSet rs = ps.getResultSet();
+            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
 
             appointments appointment;
-            while(rs.next()){
-                appointment = new appointments(rs.getInt("Appointment_ID"),
+            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
+                appointment = new appointments(rs.getInt("Appointment_ID"),//collects info from database based on column names from database
                         rs.getString("Title"),
                         rs.getString("Description"),
                         rs.getString("Location"),
@@ -195,15 +196,55 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    //Observable list method for getting the data from the database for the GUI appointment table
+    public ObservableList<customers> customerList(){
+        ObservableList <customers> customerList = FXCollections.observableArrayList();
+        try {
+            Connection conn = JDBC.getConnection();//Gets connection to database
+            String selectCustomers = "SELECT * FROM customers";//Select statement
+
+            DBQuery.setPreparedStatement(conn, selectCustomers);//sets prepared statement to be the select statement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+
+            ps.execute();//executes the prepared statement
+
+            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
+
+            customers customer;
+            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
+                customer = new customers(rs.getInt("Customer_ID"),//collects info from database based on column names from database
+                        rs.getString("Customer_Name"),
+                        rs.getString("Address"),
+                        rs.getString("Postal_Code"),
+                        rs.getString("Phone"),
+                        rs.getString("Create_Date"),
+                        rs.getString("Created_By"),
+                        rs.getString("Last_Update"),
+                        rs.getString("Last_Updated_By"),
+                        rs.getInt("Division_ID")
+                );
+                customerList.add(customer);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+        return customerList;
+
+    }
+
 
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
 
-        ObservableList<appointments> allAppointments = appointmentList();
+        ObservableList<appointments> allAppointments = appointmentList();//calls the appointmentList method for the observable list allAppointments
+        ObservableList<customers> allCustomers = customerList();//calls the customerList method for the observable list allCustomers
+
+        appointmentTableView.setItems(allAppointments);//uses the allAppointments observable list for the appointmentTableView
+        customerTableView.setItems(allCustomers);//uses the allCustomers observable list for the customerTableView
 
 
-        appointmentTableView.setItems(allAppointments);
-
+        //this sets the column information by using the appointments model getters that will return the info from the corresponding items in the observable list allAppointments
         appointmentIdCol.setCellValueFactory(new PropertyValueFactory<>("appointmentID"));
         titleCol.setCellValueFactory(new PropertyValueFactory<>("title"));
         descriptionCol.setCellValueFactory(new PropertyValueFactory<>("description"));
@@ -214,6 +255,19 @@ public class appointmentCalendarController implements Initializable {
         startCol.setCellValueFactory(new PropertyValueFactory<>("start"));
         endCol.setCellValueFactory(new PropertyValueFactory<>("end"));
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
+
+
+        //this sets the column information by using the customer model getters that will return the info from the corresponding items in the observable list allCustomers
+        customerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
+        customerNameCol.setCellValueFactory(new PropertyValueFactory<>("customerName"));
+        addressCol.setCellValueFactory(new PropertyValueFactory<>("address"));
+        postalCodeCol.setCellValueFactory(new PropertyValueFactory<>("postalCode"));
+        phoneNumberCol.setCellValueFactory(new PropertyValueFactory<>("phoneNumber"));
+        createDateCol.setCellValueFactory(new PropertyValueFactory<>("createDate"));
+        createdByCol.setCellValueFactory(new PropertyValueFactory<>("createdBy"));
+        lastUpdateCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdate"));
+        lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
+        divisionIdCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
 
 
     }

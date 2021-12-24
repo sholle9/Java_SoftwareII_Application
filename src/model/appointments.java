@@ -29,6 +29,7 @@ public class appointments {
     private int userID;
 
 
+    //Constructor
     public appointments(int appointmentID, String title, String description, String location,int contactID, String type,String start, String end, /*String createDate,String createdBy,String lastUpdate, String lastUpdatedBy,*/  int customerID, int userID){
         this.appointmentID = appointmentID;
         this.title = title;
@@ -48,20 +49,24 @@ public class appointments {
     }
 
 
-
+    //Getters
     public int getAppointmentID() {
-     return appointmentID;
+
+        return appointmentID;
     }
 
     public String getTitle(){
+
         return title;
     }
 
     public String getDescription(){
+
         return description;
     }
 
     public String getLocation(){
+
         return location;
     }
 
