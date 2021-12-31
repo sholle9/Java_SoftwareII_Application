@@ -153,9 +153,19 @@ public class appointmentCalendarController implements Initializable {
     @FXML
     void onActionUpdateCustomer(ActionEvent event) throws IOException {
 
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(getClass().getResource("/view/updateCustomer.fxml"));
+        Parent customerTableViewParent = loader.load();
+        Scene customerTableViewScene = new Scene(customerTableViewParent);
+
+        //Access the updateCustomerController to call the customerDataTransfer method
+        updateCustomerController controller = loader.getController();
+        controller.customerDataTransfer(customerTableView.getSelectionModel().getSelectedItem());
+
+
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/updateCustomer.fxml"));
-        stage.setScene(new Scene(scene));
+        stage.setScene(customerTableViewScene);
         stage.show();
 
     }

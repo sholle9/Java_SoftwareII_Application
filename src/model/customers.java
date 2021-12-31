@@ -69,4 +69,12 @@ public class customers {
     public int getDivisionID(){
         return divisionID;
     }
+
+    public String getFirstName(String fullName){
+        return fullName.split(" (?!.* )")[0];
+    }
+
+    public String getLastName(String fullName){
+        return fullName.split(" (?!.* )")[1];
+    }
 }

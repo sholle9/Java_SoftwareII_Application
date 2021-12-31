@@ -20,19 +20,17 @@
       <Label layoutX="36.0" layoutY="93.0" prefHeight="17.0" prefWidth="96.0" text="First Name" />
       <Label layoutX="36.0" layoutY="127.0" prefHeight="17.0" prefWidth="96.0" text="Last Name" />
       <Label layoutX="36.0" layoutY="165.0" prefHeight="17.0" prefWidth="96.0" text="Address" />
-      <Label layoutX="36.0" layoutY="222.0" prefHeight="17.0" prefWidth="96.0" text="City" />
-      <Label layoutX="36.0" layoutY="261.0" prefHeight="17.0" prefWidth="96.0" text="State/ Providence" />
-      <Label layoutX="36.0" layoutY="302.0" prefHeight="17.0" prefWidth="96.0" text="Country" />
-      <Label layoutX="36.0" layoutY="342.0" prefHeight="17.0" prefWidth="96.0" text="Postal Code" />
-      <Label layoutX="36.0" layoutY="381.0" prefHeight="17.0" prefWidth="96.0" text="Phone Number" />
-      <TextField fx:id="customerIdTxt" layoutX="137.0" layoutY="55.0" prefHeight="25.0" prefWidth="150.0" />
+      <Label layoutX="36.0" layoutY="225.0" prefHeight="17.0" prefWidth="96.0" text="State/ Providence" />
+      <Label layoutX="36.0" layoutY="261.0" prefHeight="17.0" prefWidth="96.0" text="Country" />
+      <Label layoutX="36.0" layoutY="296.0" prefHeight="17.0" prefWidth="96.0" text="Postal Code" />
+      <Label layoutX="36.0" layoutY="328.0" prefHeight="17.0" prefWidth="96.0" text="Phone Number" />
+      <TextField fx:id="customerIdTxt" editable="false" layoutX="137.0" layoutY="55.0" prefHeight="25.0" prefWidth="150.0" promptText="Auto-Generated" />
       <TextField fx:id="firstNameTxt" layoutX="137.0" layoutY="89.0" prefHeight="25.0" prefWidth="150.0" />
       <TextField fx:id="lastNameTxt" layoutX="137.0" layoutY="123.0" prefHeight="25.0" prefWidth="150.0" />
-      <TextField fx:id="cityTxt" layoutX="139.0" layoutY="218.0" prefHeight="25.0" prefWidth="150.0" />
-      <ComboBox fx:id="stateProvCb" layoutX="139.0" layoutY="257.0" prefWidth="150.0" />
-      <ComboBox fx:id="countryCb" layoutX="139.0" layoutY="298.0" prefWidth="150.0" />
-      <TextField fx:id="postalCodeTxt" layoutX="139.0" layoutY="338.0" prefHeight="25.0" prefWidth="150.0" />
-      <TextField fx:id="phoneNumberTxt" layoutX="139.0" layoutY="377.0" prefHeight="25.0" prefWidth="150.0" />
+      <ComboBox fx:id="stateProvCb" layoutX="137.0" layoutY="221.0" prefWidth="150.0" />
+      <ComboBox fx:id="countryCb" layoutX="137.0" layoutY="257.0" prefWidth="150.0" />
+      <TextField fx:id="postalCodeTxt" layoutX="137.0" layoutY="292.0" prefHeight="25.0" prefWidth="150.0" />
+      <TextField fx:id="phoneNumberTxt" layoutX="137.0" layoutY="324.0" prefHeight="25.0" prefWidth="150.0" />
       <ButtonBar layoutX="215.0" layoutY="430.0" prefHeight="40.0" prefWidth="200.0">
         <buttons>
           <Button mnemonicParsing="false" onAction="#onActionDeleteCustomer" text="Delete" />
