@@ -90,7 +90,7 @@ public class addCustomerController {
             String phoneNumber;
             int divisionID;
 
-            //Get user input for combo box
+            //Get user input for addCustomer text and combo boxes
             customerName = firstNameTxt.getText() + " " + lastNameTxt.getText();
             address = addressTxtA.getText();
             postalCode = postalCodeTxt.getText();

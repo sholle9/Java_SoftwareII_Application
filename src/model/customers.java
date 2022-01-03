@@ -77,4 +77,9 @@ public class customers {
     public String getLastName(String fullName){
         return fullName.split(" (?!.* )")[1];
     }
+
+    @Override //this overrides the toString Method that automatically occurs when the combo boxes have the setItems method
+    public String toString(){
+        return (customerName);
+    }
 }

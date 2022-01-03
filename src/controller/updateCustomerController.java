@@ -78,56 +78,6 @@ public class updateCustomerController implements Initializable {
 
     }
 
-    @FXML
-    void onActionDeleteCustomer(ActionEvent event) throws IOException {
-
-        try {
-            Connection conn = JDBC.getConnection();//Connect to database
-            String deleteStatement = "DELETE FROM customers WHERE Customer_ID = ?";//? are place holders indexed at 1
-
-            DBQuery.setPreparedStatement(conn, deleteStatement);//Create PreparedStatement
-            PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
-
-            String customerID = customerIdTxt.getText();
-
-
-
-//key-value mapping for the 1 ?
-            ps.setString(1,customerID);
-
-            ps.execute();//Execute PreparedStatement
-
-//Check row(s) affected
-            if (ps.getUpdateCount() > 0){
-                System.out.println(ps.getUpdateCount() + " row(s) affected!");
-            }
-            else {
-                System.out.println("No change!");
-            }
-
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage()); //getMessage will print out the exception found
-        }
-
-        stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
-
-    }
-
-    @FXML
-    void onActionSaveUpdatedCustomer(ActionEvent event) throws IOException {
-
-        stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
-
-    }
-
-
     public ObservableList<firstLevelDivision> divisionList(){
         ObservableList<firstLevelDivision> divisionList = FXCollections.observableArrayList();
         try{
@@ -195,10 +145,67 @@ public class updateCustomerController implements Initializable {
         addressTxtA.setText(selectedCustomer.getAddress());
         postalCodeTxt.setText(selectedCustomer.getPostalCode());
         phoneNumberTxt.setText(selectedCustomer.getPhoneNumber());
-        //stateProvCb.setSelectionModel(selectedCustomer.getDivisionID());
+
 
     }
 
+    @FXML
+    void onActionDeleteCustomer(ActionEvent event) throws IOException {
+
+        try {
+            Connection conn = JDBC.getConnection();//Connect to database
+            String deleteAppointmentStatement = "DELETE FROM appointments WHERE Customer_ID = ?";//? are place holders indexed at 1
+            String deleteCustomerStatement = "DELETE FROM customers WHERE Customer_ID = ?";//? are place holders indexed at 1
+
+            DBQuery.setPreparedStatement(conn, deleteAppointmentStatement);//Create PreparedStatement
+            PreparedStatement ps2 = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+            DBQuery.setPreparedStatement(conn, deleteCustomerStatement);//Create PreparedStatement
+            PreparedStatement ps1 = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+
+            String customerID = customerIdTxt.getText();
+
+            //key-value mapping for the 1 ?
+            ps2.setString(1,customerID);
+            ps1.setString(1,customerID);
+
+            ps2.execute();
+            ps1.execute();//Execute PreparedStatement
+
+            //Check row(s) affected
+            if (ps2.getUpdateCount() > 0){
+                System.out.println(ps2.getUpdateCount() + " row(s) affected for Appointments!");
+            }
+            else {
+                System.out.println("No change!");
+            }
+            if (ps1.getUpdateCount() > 0){
+                System.out.println(ps1.getUpdateCount() + " row(s) affected for Customers!");
+            }
+            else {
+                System.out.println("No change!");
+            }
+
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+
+        stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+
+    }
+
+    @FXML
+    void onActionSaveUpdatedCustomer(ActionEvent event) throws IOException {
+
+        stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+
+    }
 
 
     @FXML
