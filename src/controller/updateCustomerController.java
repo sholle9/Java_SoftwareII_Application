@@ -215,6 +215,47 @@ public class updateCustomerController implements Initializable {
     @FXML
     void onActionSaveUpdatedCustomer(ActionEvent event) throws IOException {
 
+        try{
+            Connection conn = JDBC.getConnection();//Connect to database
+            String updateStatement = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";//? are place holders indexed at 1
+
+            DBQuery.setPreparedStatement(conn, updateStatement);//Create PreparedStatement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+
+            String customerName, newAddress, newPostalCode, newPhone, customerID;
+            int newDivisionID;
+
+            //Get user input for updateCustomer text and combo boxes
+            customerName = firstNameTxt.getText() + " " + lastNameTxt.getText();
+            newAddress = addressTxtA.getText();
+            newPostalCode = postalCodeTxt.getText();
+            newPhone = phoneNumberTxt.getText();
+            newDivisionID = stateProvCb.getValue().getDivisionID();
+            customerID = customerIdTxt.getText();
+
+            //key-value mapping for the 3 ?'s
+            ps.setString(1,customerName);
+            ps.setString(2,newAddress);
+            ps.setString(3,newPostalCode);
+            ps.setString(4,newPhone);
+            ps.setInt(5,newDivisionID);
+            ps.setString(6, customerID);
+
+            ps.execute();//Execute PreparedStatement
+
+            //Check row(s) affected
+            if (ps.getUpdateCount() > 0){
+                System.out.println(ps.getUpdateCount() + " row(s) affected!");
+            }
+            else {
+                System.out.println("No change!");
+            }
+
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+
         stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
         stage.setScene(new Scene(scene));
