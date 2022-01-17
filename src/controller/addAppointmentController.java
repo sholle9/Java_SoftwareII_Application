@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 import helper.DBQuery;
@@ -240,6 +241,14 @@ public class addAppointmentController {
         ObservableList<users> allUsers = userList();//call the userList method which will pull from the database
         ObservableList<contacts>allContacts = contactList();//call the contactList method which will pull from the database
         ObservableList<customers>allCustomers = customerList();//call the customerList method which will pull from the database
+
+//        LocalTime startTime = LocalTime.of(8,0);
+//        LocalTime endTime = LocalTime.of(22,0);
+//
+//        while(startTime.isBefore(endTime.plusSeconds(1))){
+//            startTimeCb.getItems().add(startTime);
+//            startTime = startTime.plusMinutes(15);
+//        }
 
         userIdCb.setItems(allUsers);//this sets the combo box list but see model users for the override of the toString method
 

@@ -35,8 +35,6 @@ public class updateCustomerController implements Initializable {
     private URL location;
 
     private static customers selectedCustomer;
-    private static firstLevelDivision selectedCustomerDivision;
-    private static countries selectedCustomerCountry;
 
     @FXML
     private TextField customerIdTxt;
@@ -138,6 +136,7 @@ public class updateCustomerController implements Initializable {
     //this will initialize customer data selected from appointmentCalendarController
     public void customerDataTransfer(customers customerData){
         selectedCustomer = customerData;
+        int divisionID = selectedCustomer.getDivisionID();//creates local variable for the division id of the selectedCustomer
 
         customerIdTxt.setText(String.valueOf(selectedCustomer.getCustomerID()));
         firstNameTxt.setText(selectedCustomer.getFirstName(customerData.getCustomerName()));
@@ -146,6 +145,22 @@ public class updateCustomerController implements Initializable {
         postalCodeTxt.setText(selectedCustomer.getPostalCode());
         phoneNumberTxt.setText(selectedCustomer.getPhoneNumber());
 
+        //This for loop goes through the observable list created for the stateProvCB in the initializable
+        for(firstLevelDivision division : stateProvCb.getItems()){
+            if(divisionID == division.getDivisionID()){
+                stateProvCb.setValue(division);//sets the value of the combo box to the division id that matches the selectedCustomer
+                int countryID = division.getCountryID();
+
+                //Nested for loop to use the corresponding countryID found in the division list
+                for(countries country : countryCb.getItems()){
+                    if(countryID == country.getCountryID()){
+                        countryCb.setValue(country); //sets the combo box to the country value that corresponds to the countryID found in the division list
+                        break;
+                    }
+                }
+                break;
+            }
+        }
 
     }
 
