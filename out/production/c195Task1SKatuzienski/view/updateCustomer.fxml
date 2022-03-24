@@ -1,15 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ButtonBar?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TitledPane?>
-<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane prefHeight="484.0" prefWidth="481.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.updateCustomerController">
+<AnchorPane prefHeight="484.0" prefWidth="481.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.updateCustomerController">
    <children>
       <TitledPane alignment="CENTER" animated="false" collapsible="false" prefHeight="26.0" prefWidth="480.0" text="Update Existing Customer">
         <content>
@@ -28,7 +22,7 @@
       <TextField fx:id="firstNameTxt" layoutX="137.0" layoutY="89.0" prefHeight="25.0" prefWidth="150.0" />
       <TextField fx:id="lastNameTxt" layoutX="137.0" layoutY="123.0" prefHeight="25.0" prefWidth="150.0" />
       <ComboBox fx:id="stateProvCb" layoutX="137.0" layoutY="221.0" prefWidth="150.0" />
-      <ComboBox fx:id="countryCb" layoutX="137.0" layoutY="257.0" prefWidth="150.0" />
+      <ComboBox fx:id="countryCb" layoutX="137.0" layoutY="257.0" onAction="#onActionCountry" prefWidth="150.0" />
       <TextField fx:id="postalCodeTxt" layoutX="137.0" layoutY="292.0" prefHeight="25.0" prefWidth="150.0" />
       <TextField fx:id="phoneNumberTxt" layoutX="137.0" layoutY="324.0" prefHeight="25.0" prefWidth="150.0" />
       <ButtonBar layoutX="215.0" layoutY="430.0" prefHeight="40.0" prefWidth="200.0">

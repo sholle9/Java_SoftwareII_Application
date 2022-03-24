@@ -76,6 +76,7 @@ public class updateCustomerController implements Initializable {
 
     }
 
+    //Observable list method for getting the data from the database for the GUI stateProv combo box
     public ObservableList<firstLevelDivision> divisionList(){
         ObservableList<firstLevelDivision> divisionList = FXCollections.observableArrayList();
         try{
@@ -103,6 +104,96 @@ public class updateCustomerController implements Initializable {
         }
 
         return divisionList;
+    }
+
+    //This creates a list of only the states that have countryID 1 for the US
+    public ObservableList<firstLevelDivision> statesList(){
+        ObservableList<firstLevelDivision> statesList = FXCollections.observableArrayList();
+        try{
+            Connection conn = JDBC.getConnection();//Gets connection to database
+            String selectDivision = "SELECT * FROM first_level_divisions WHERE Country_ID = 1";//Select statement
+
+            DBQuery.setPreparedStatement(conn, selectDivision);//sets prepared statement to be the select statement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+
+            ps.execute();//executes the prepared statement
+
+            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
+
+            firstLevelDivision states;
+            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
+                states = new firstLevelDivision(rs.getInt("Division_ID"),//collects info from database based on column names from database
+                        rs.getString("Division"),
+                        rs.getInt("Country_ID")
+                );
+                statesList.add(states);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+
+        return statesList;
+    }
+
+    //This creates a list of only the providences that have countryID 2 for the UK
+    public ObservableList<firstLevelDivision> ukList(){
+        ObservableList<firstLevelDivision> ukList = FXCollections.observableArrayList();
+        try{
+            Connection conn = JDBC.getConnection();//Gets connection to database
+            String selectDivision = "SELECT * FROM first_level_divisions WHERE Country_ID = 2";//Select statement
+
+            DBQuery.setPreparedStatement(conn, selectDivision);//sets prepared statement to be the select statement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+
+            ps.execute();//executes the prepared statement
+
+            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
+
+            firstLevelDivision ukProv;
+            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
+                ukProv = new firstLevelDivision(rs.getInt("Division_ID"),//collects info from database based on column names from database
+                        rs.getString("Division"),
+                        rs.getInt("Country_ID")
+                );
+                ukList.add(ukProv);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+
+        return ukList;
+    }
+
+    //This creates a list of only the providences that have countryID 3 for the Canada
+    public ObservableList<firstLevelDivision> canadaList(){
+        ObservableList<firstLevelDivision> canadaList = FXCollections.observableArrayList();
+        try{
+            Connection conn = JDBC.getConnection();//Gets connection to database
+            String selectDivision = "SELECT * FROM first_level_divisions WHERE Country_ID = 3";//Select statement
+
+            DBQuery.setPreparedStatement(conn, selectDivision);//sets prepared statement to be the select statement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+
+            ps.execute();//executes the prepared statement
+
+            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
+
+            firstLevelDivision canadaProv;
+            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
+                canadaProv = new firstLevelDivision(rs.getInt("Division_ID"),//collects info from database based on column names from database
+                        rs.getString("Division"),
+                        rs.getInt("Country_ID")
+                );
+                canadaList.add(canadaProv);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+
+        return canadaList;
     }
 
     //Observable list method for getting the data from the database for the GUI country combo box
@@ -262,6 +353,31 @@ public class updateCustomerController implements Initializable {
         stage.show();
 
     }
+
+    @FXML
+    void onActionCountry(ActionEvent event) {
+        ObservableList<firstLevelDivision> allDivisions = divisionList();//call the divisionList method which will pull from the database
+
+        ObservableList<firstLevelDivision> usStates = statesList();//call the statesList which will only pull division names with countryID 1
+        ObservableList<firstLevelDivision> ukProvs = ukList();//call the ukList which will only pull division names with countryID 2
+        ObservableList<firstLevelDivision> canadaProvs = canadaList();//call the canadaList which will only pull division names with countryID 3
+
+
+        int x = countryCb.getValue().getCountryID();//sets x to the countryID that the user selects
+
+        //if-else statements to filter the stateProvCb by the corresponding country
+        if (x == 1) {
+            stateProvCb.setItems(usStates);
+        } else if (x == 2) {
+            stateProvCb.setItems(ukProvs);
+        } else if (x == 3) {
+            stateProvCb.setItems(canadaProvs);
+        } else {
+            stateProvCb.setItems(allDivisions);
+        }
+    }
+
+
 
 
     @FXML
