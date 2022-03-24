@@ -270,7 +270,7 @@ public class updateCustomerController implements Initializable {
 
             String customerID = customerIdTxt.getText();
 
-            //key-value mapping for the 1 ?
+            //key-value mapping for the 1 ? 
             ps2.setString(1,customerID);
             ps1.setString(1,customerID);
 
