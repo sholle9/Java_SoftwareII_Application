@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="466.0" prefWidth="735.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <SplitPane layoutY="28.0" prefHeight="438.0" prefWidth="735.0">
+        <items>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
+               <children>
+                  <ButtonBar layoutX="454.0" layoutY="386.0" prefHeight="40.0" prefWidth="200.0">
+                    <buttons>
+                      <Button mnemonicParsing="false" text="Add" />
+                        <Button mnemonicParsing="false" text="Update" />
+                        <Button mnemonicParsing="false" text="Cancel" />
+                    </buttons>
+                  </ButtonBar>
+                  <TableView layoutX="4.0" layoutY="46.0" prefHeight="344.0" prefWidth="725.0">
+                     <columns>
+                        <TableColumn prefWidth="102.0" text="Appointment ID" />
+                        <TableColumn prefWidth="48.0" text="Title" />
+                        <TableColumn prefWidth="75.0" text="Description" />
+                        <TableColumn prefWidth="75.0" text="Location" />
+                        <TableColumn prefWidth="75.0" text="Contact" />
+                        <TableColumn prefWidth="63.0" text="Type" />
+                        <TableColumn prefWidth="62.0" text="Start " />
+                        <TableColumn prefWidth="57.0" text="End" />
+                        <TableColumn prefWidth="101.0" text="Customer ID" />
+                        <TableColumn prefWidth="66.0" text="User ID" />
+                     </columns>
+                  </TableView>
+                  <RadioButton layoutX="14.0" layoutY="14.0" mnemonicParsing="false" prefHeight="17.0" prefWidth="98.0" text="Weekly View" />
+                  <RadioButton layoutX="122.0" layoutY="14.0" mnemonicParsing="false" text="Monthly View" />
+               </children>
+            </AnchorPane>
+        </items>
+      </SplitPane>
+      <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutX="-1.0" layoutY="1.0" prefHeight="27.0" prefWidth="735.0" text="Appointment Calendar" />
+   </children>
+</AnchorPane>
