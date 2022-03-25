@@ -189,7 +189,14 @@ public class addAppointmentController {
             users user;
             while(rs.next()){//rs.next() goes to the next item or line of the result set rs
                 user = new users(rs.getInt("User_ID"),//collects info from database based on column names from database
-                        rs.getString("User_Name"));
+                        rs.getString("User_Name"),
+                        rs.getString("Password"),
+                        rs.getDate("Create_Date").toLocalDate(),
+                        rs.getTime("Create_Date").toLocalTime(),
+                        rs.getString("Created_By"),
+                        rs.getDate("Last_Update").toLocalDate(),
+                        rs.getTime("Last_Update").toLocalTime(),
+                        rs.getString("Last_Updated_By"));
                 userList.add(user);
             }
         }
