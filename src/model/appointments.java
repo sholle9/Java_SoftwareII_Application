@@ -1,14 +1,8 @@
 package model;
 
-import helper.DBQuery;
-import helper.JDBC;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 public class appointments {
 
@@ -19,30 +13,38 @@ public class appointments {
     private String location;
     private int contactID;
     private String type;
-    private String start;
-    private String end;
-    //private String createDate;
-    //private String createdBy;
-    //private String lastUpdate;
-    //private String lastUpdatedBy;
+    private LocalDate startDate;
+    private LocalTime startTime;
+    private LocalDateTime startDateTime;
+    private LocalDate endDate;
+    private LocalTime endTime;
+    private LocalDateTime endDateTime;
+    private LocalDateTime createDate;
+    private String createdBy;
+    private LocalDateTime lastUpdate;
+    private String lastUpdatedBy;
     private int customerID;
     private int userID;
 
 
     //Constructor
-    public appointments(int appointmentID, String title, String description, String location,int contactID, String type,String start, String end, /*String createDate,String createdBy,String lastUpdate, String lastUpdatedBy,*/  int customerID, int userID){
+    public appointments(int appointmentID, String title, String description, String location,int contactID, String type, LocalDate startDate, LocalTime startTime, LocalDateTime startDateTime, LocalDate endDate, LocalTime endTime, LocalDateTime endDateTime, LocalDateTime createDate,String createdBy,LocalDateTime lastUpdate, String lastUpdatedBy, int customerID, int userID){
         this.appointmentID = appointmentID;
         this.title = title;
         this.description = description;
         this.location = location;
         this.contactID =contactID;
         this.type = type;
-        this.start = start;
-        this.end = end;
-        //this.createDate = createDate;
-        //this.createdBy = createdBy;
-        //this.lastUpdate = lastUpdate;
-        //this.lastUpdatedBy = lastUpdatedBy;
+        this.startDate = startDate;
+        this.startTime = startTime;
+        this.startDateTime = startDateTime;
+        this.endDate = endDate;
+        this.endTime = endTime;
+        this.endDateTime = endDateTime;
+        this.createDate = createDate;
+        this.createdBy = createdBy;
+        this.lastUpdate = lastUpdate;
+        this.lastUpdatedBy = lastUpdatedBy;
         this.customerID = customerID;
         this.userID = userID;
 
@@ -71,22 +73,42 @@ public class appointments {
     }
 
     public int getContactID(){
+
         return contactID;
     }
 
     public String getType(){
+
         return type;
     }
 
-    public String getStart(){
-        return start;
+    public LocalTime getStartTime(){
+
+        return startTime;
     }
 
-    public String getEnd(){
-        return end;
+    public LocalDate getStateDate(){
+        return startDate;
     }
 
-    /*public String getCreateDate(){
+    public LocalDateTime getStartDateTime() {
+        return startDateTime;
+    }
+
+    public LocalTime getEndTime(){
+
+        return endTime;
+    }
+
+    public LocalDate getEndDate() {
+        return  endDate;
+    }
+
+    public LocalDateTime getEndDateTime() {
+        return endDateTime;
+    }
+
+    public LocalDateTime getCreateDate(){
         return createDate;
     }
 
@@ -94,19 +116,21 @@ public class appointments {
         return createdBy;
     }
 
-    public String getLastUpdate(){
+    public LocalDateTime getLastUpdate(){
         return lastUpdate;
     }
 
     public String getLastUpdatedBy(){
         return lastUpdatedBy;
-    }*/
+    }
 
     public int getCustomerID(){
+
         return customerID;
     }
 
     public int getUserID(){
+
         return userID;
     }
 

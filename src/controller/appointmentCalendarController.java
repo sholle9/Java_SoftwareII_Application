@@ -191,8 +191,16 @@ public class appointmentCalendarController implements Initializable {
                         rs.getString("Location"),
                         rs.getInt("Contact_ID"),
                         rs.getString("Type"),
-                        rs.getString("Start"),
-                        rs.getString("End"),
+                        rs.getDate("Start").toLocalDate(),
+                        rs.getTime("Start").toLocalTime(),
+                        rs.getTimestamp("Start").toLocalDateTime(),
+                        rs.getDate("End").toLocalDate(),
+                        rs.getTime("End").toLocalTime(),
+                        rs.getTimestamp("End").toLocalDateTime(),
+                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getString("Created_By"),
+                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getString("Last_Updated_By"),
                         rs.getInt("Customer_ID"),
                         rs.getInt("User_ID")
                         );
@@ -227,9 +235,9 @@ public class appointmentCalendarController implements Initializable {
                         rs.getString("Address"),
                         rs.getString("Postal_Code"),
                         rs.getString("Phone"),
-                        rs.getString("Create_Date"),
+                        rs.getTimestamp("Create_Date").toLocalDateTime(),
                         rs.getString("Created_By"),
-                        rs.getString("Last_Update"),
+                        rs.getTimestamp("Last_Update").toLocalDateTime(),
                         rs.getString("Last_Updated_By"),
                         rs.getInt("Division_ID")
                 );
@@ -262,8 +270,8 @@ public class appointmentCalendarController implements Initializable {
         contactCol.setCellValueFactory(new PropertyValueFactory<>("contactID"));
         typeCol.setCellValueFactory(new PropertyValueFactory<>("type"));
         apptCustomerIdCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
-        startCol.setCellValueFactory(new PropertyValueFactory<>("start"));
-        endCol.setCellValueFactory(new PropertyValueFactory<>("end"));
+        startCol.setCellValueFactory(new PropertyValueFactory<>("startDateTime"));
+        endCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
         userIdCol.setCellValueFactory(new PropertyValueFactory<>("userID"));
 
 

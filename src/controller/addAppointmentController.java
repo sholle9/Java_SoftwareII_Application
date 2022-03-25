@@ -5,6 +5,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
@@ -50,10 +53,10 @@ public class addAppointmentController {
     private ComboBox<contacts> contactCb;
 
     @FXML
-    private ComboBox<?> startTimeCb;
+    private ComboBox<LocalTime> startTimeCb;
 
     @FXML
-    private ComboBox<?> endTimeCb;
+    private ComboBox<LocalTime> endTimeCb;
 
     @FXML
     private ComboBox<customers> customerIdCb;
@@ -62,10 +65,10 @@ public class addAppointmentController {
     private ComboBox<users> userIdCb;
 
     @FXML
-    private ComboBox<?> startDateCb;
+    private ComboBox<LocalDate> startDateCb;
 
     @FXML
-    private ComboBox<?> endDateCb;
+    private ComboBox<LocalDate> endDateCb;
 
     Stage stage;
     Parent scene;
@@ -85,7 +88,7 @@ public class addAppointmentController {
 
         try{
             Connection conn = JDBC.getConnection();//Connect to databaseString
-            String insertStatement = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";//? are place holders indexed at 1
+            String insertStatement = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Create_Date, Created_By,Last_Update,Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//? are place holders indexed at 1
 
             DBQuery.setPreparedStatement(conn, insertStatement);//Create PreparedStatement
             PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
@@ -94,8 +97,12 @@ public class addAppointmentController {
             String description;
             String location;
             String type;
-            String start;
-            String end;
+            LocalDateTime start;
+            LocalDateTime end;
+            LocalDateTime createDate;
+            String createdBy;
+            LocalDateTime lastUpdate;
+            String lastUpdatedBy;
             int customerID;
             int userID;
             int contactID;
@@ -105,22 +112,30 @@ public class addAppointmentController {
             description = descriptionTxtA.getText();
             location = locationTxt.getText();
             type = typeTxt.getText();
-            start = "2022-01-03 00:00:00" ;
-            end = "2022-01-03 00:00:00";
+            start = LocalDateTime.of(startDateCb.getSelectionModel().getSelectedItem(), startTimeCb.getSelectionModel().getSelectedItem()) ;
+            end = LocalDateTime.of(endDateCb.getSelectionModel().getSelectedItem(), endTimeCb.getSelectionModel().getSelectedItem());
+            createDate = LocalDateTime.now();
+            createdBy = userIdCb.getValue().getUserName();
+            lastUpdate = LocalDateTime.now();
+            lastUpdatedBy = userIdCb.getValue().getUserName();
             customerID = customerIdCb.getValue().getCustomerID();
             userID = userIdCb.getValue().getUserID();
             contactID = contactCb.getValue().getContactID();
 
-            //key-value mapping for the 9 ?'s
+            //key-value mapping for the 13 ?'s
             ps.setString(1,title);
             ps.setString(2,description);
             ps.setString(3,location);
             ps.setString(4,type);
-            ps.setString(5,start);
-            ps.setString(6,end);
-            ps.setInt(7,customerID);
-            ps.setInt(8,userID);
-            ps.setInt(9,contactID);
+            ps.setTimestamp(5, Timestamp.valueOf(start));
+            ps.setTimestamp(6, Timestamp.valueOf(end));
+            ps.setTimestamp(7, Timestamp.valueOf(createDate));
+            ps.setString(8,createdBy);
+            ps.setTimestamp(9, Timestamp.valueOf(lastUpdate));
+            ps.setString(10,lastUpdatedBy);
+            ps.setInt(11,customerID);
+            ps.setInt(12,userID);
+            ps.setInt(13,contactID);
 
             ps.execute();//Execute PreparedStatement
 
@@ -228,9 +243,9 @@ public class addAppointmentController {
                         rs.getString("Address"),
                         rs.getString("Postal_code"),
                         rs.getString("Phone"),
-                        rs.getString("Create_Date"),
+                        rs.getTimestamp("Create_Date").toLocalDateTime(),
                         rs.getString("Created_By"),
-                        rs.getString("Last_Update"),
+                        rs.getTimestamp("Last_Update").toLocalDateTime(),
                         rs.getString("Last_updated_By"),
                         rs.getInt("Division_ID"));
                 customerList.add(customer);
@@ -243,19 +258,46 @@ public class addAppointmentController {
 
     }
 
+    //This observable list populates times from 8am to 10pm in military time in 15 minute increments
+    ObservableList<LocalTime> startTimeList() {
+        ObservableList<LocalTime> startTimeList = FXCollections.observableArrayList();
+        LocalTime start = LocalTime.of(8, 0);
+        LocalTime end = LocalTime.of(22, 0);
+
+        while (start.isBefore(end.plusSeconds(1))) {
+            start = start.plusMinutes(15);
+            startTimeList.add(start);
+        }
+        return startTimeList;
+    }
+
+    //This observable list populates dates from today till end of 2023
+    ObservableList<LocalDate> startDateList(){
+        ObservableList<LocalDate>startDateList = FXCollections.observableArrayList();
+        LocalDate start = LocalDate.now();
+        LocalDate end = LocalDate.of(2023,12,31);
+
+        while (start.isBefore(end.plusDays(1))){
+            start = start.plusDays(1);
+            startDateList.add(start);
+        }
+        return startDateList;
+    }
     @FXML
     void initialize() {
         ObservableList<users> allUsers = userList();//call the userList method which will pull from the database
         ObservableList<contacts>allContacts = contactList();//call the contactList method which will pull from the database
         ObservableList<customers>allCustomers = customerList();//call the customerList method which will pull from the database
+        ObservableList<LocalTime>startTimes = startTimeList();//calls the startTimeList method
+        ObservableList<LocalDate>startDates = startDateList();//calls the startDateList method
 
-//        LocalTime startTime = LocalTime.of(8,0);
-//        LocalTime endTime = LocalTime.of(22,0);
-//
-//        while(startTime.isBefore(endTime.plusSeconds(1))){
-//            startTimeCb.getItems().add(startTime);
-//            startTime = startTime.plusMinutes(15);
-//        }
+        //Populates list of LocalTime for the startTime and endTime cb
+        startTimeCb.setItems(startTimes);
+        endTimeCb.setItems(startTimes);
+
+        //Populates list of LocalDate for startDate and endDate cb
+        startDateCb.setItems(startDates);
+        endDateCb.setItems(startDates);
 
         userIdCb.setItems(allUsers);//this sets the combo box list but see model users for the override of the toString method
 
