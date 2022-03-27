@@ -5,7 +5,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ResourceBundle;
 
@@ -210,6 +212,35 @@ public class updateAppointmentController {
     @FXML
     void onActionDeleteAppointment(ActionEvent event) throws IOException {
 
+        try {
+            Connection conn = JDBC.getConnection();//Connect to database
+            String deleteAppointmentStatement = "DELETE FROM appointments WHERE Appointment_ID = ?";//? are place holders indexed at 1
+
+            DBQuery.setPreparedStatement(conn, deleteAppointmentStatement);//Create PreparedStatement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+
+
+
+            int appointmentID = selectedAppointment.getAppointmentID();
+
+            //key-value mapping for the 1 ?
+            ps.setInt(1,appointmentID);
+
+            ps.execute();//Execute PreparedStatement
+
+            //Check row(s) affected
+            if (ps.getUpdateCount() > 0){
+                System.out.println(ps.getUpdateCount() + " row(s) affected for Appointments!");
+            }
+            else {
+                System.out.println("No change!");
+            }
+
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+
         stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
         stage.setScene(new Scene(scene));
@@ -219,6 +250,69 @@ public class updateAppointmentController {
 
     @FXML
     void onActionSaveUpdatedAppointment(ActionEvent event) throws IOException {
+
+        try{
+            Connection conn = JDBC.getConnection();//Connect to databaseString
+            String updateStatement = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";//? are place holders indexed at 1
+
+
+            DBQuery.setPreparedStatement(conn, updateStatement);//Create PreparedStatement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+
+            int appointmentID;
+            String title;
+            String description;
+            String location;
+            String type;
+            LocalDateTime start;
+            LocalDateTime end;
+            LocalDateTime lastUpdate;
+            String lastUpdatedBy;
+            int customerID;
+            int userID;
+            int contactID;
+
+            //Get user input for updateAppointment text and combo boxes
+            appointmentID = selectedAppointment.getAppointmentID();
+            title = titleTxt.getText();
+            description = descriptionTxtA.getText();
+            location = locationTxt.getText();
+            type = typeTxt.getText();
+            start = LocalDateTime.of(startDateCb.getSelectionModel().getSelectedItem(), startTimeCb.getSelectionModel().getSelectedItem()) ;
+            end = LocalDateTime.of(endDateCb.getSelectionModel().getSelectedItem(), endTimeCb.getSelectionModel().getSelectedItem());
+            lastUpdate = LocalDateTime.now();
+            lastUpdatedBy = userIdCb.getValue().getUserName();
+            customerID = customerIdCb.getValue().getCustomerID();
+            userID = userIdCb.getValue().getUserID();
+            contactID = contactCb.getValue().getContactID();
+
+            //key-value mapping for the 12 ?'s
+            ps.setString(1,title);
+            ps.setString(2,description);
+            ps.setString(3,location);
+            ps.setString(4,type);
+            ps.setTimestamp(5, Timestamp.valueOf(start));
+            ps.setTimestamp(6, Timestamp.valueOf(end));
+            ps.setTimestamp(7, Timestamp.valueOf(lastUpdate));
+            ps.setString(8,lastUpdatedBy);
+            ps.setInt(9,customerID);
+            ps.setInt(10,userID);
+            ps.setInt(11,contactID);
+            ps.setInt(12, appointmentID);
+
+            ps.execute();//Execute PreparedStatement
+
+            //Check row(s) affected
+            if (ps.getUpdateCount() > 0){
+                System.out.println(ps.getUpdateCount() + " row(s) affected!");
+            }
+            else {
+                System.out.println("No change!");
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
 
         stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
