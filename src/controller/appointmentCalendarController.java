@@ -5,6 +5,7 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 import helper.DBQuery;
@@ -110,6 +111,88 @@ public class appointmentCalendarController implements Initializable {
     Stage stage;
     Parent scene;
 
+    //Observable list method for getting the data from the database for the GUI appointment table
+    public ObservableList<appointments> appointmentList(){
+        ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
+        try {
+            Connection conn = JDBC.getConnection();//Gets connection to database
+            String selectAppointments = "SELECT * FROM appointments";//Select statement
+
+            DBQuery.setPreparedStatement(conn, selectAppointments);//sets prepared statement to be the select statement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+
+            ps.execute();//executes the prepared statement
+
+            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
+
+            appointments appointment;
+            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
+                appointment = new appointments(rs.getInt("Appointment_ID"),//collects info from database based on column names from database
+                        rs.getString("Title"),
+                        rs.getString("Description"),
+                        rs.getString("Location"),
+                        rs.getInt("Contact_ID"),
+                        rs.getString("Type"),
+                        rs.getDate("Start").toLocalDate(),
+                        rs.getTime("Start").toLocalTime(),
+                        rs.getTimestamp("Start").toLocalDateTime(),
+                        rs.getDate("End").toLocalDate(),
+                        rs.getTime("End").toLocalTime(),
+                        rs.getTimestamp("End").toLocalDateTime(),
+                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getString("Created_By"),
+                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getString("Last_Updated_By"),
+                        rs.getInt("Customer_ID"),
+                        rs.getInt("User_ID")
+                );
+                appointmentList.add(appointment);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+        return appointmentList;
+
+    }
+
+    //Observable list method for getting the data from the database for the GUI appointment table
+    public ObservableList<customers> customerList(){
+        ObservableList <customers> customerList = FXCollections.observableArrayList();
+        try {
+            Connection conn = JDBC.getConnection();//Gets connection to database
+            String selectCustomers = "SELECT * FROM customers";//Select statement
+
+            DBQuery.setPreparedStatement(conn, selectCustomers);//sets prepared statement to be the select statement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+
+            ps.execute();//executes the prepared statement
+
+            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
+
+            customers customer;
+            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
+                customer = new customers(rs.getInt("Customer_ID"),//collects info from database based on column names from database
+                        rs.getString("Customer_Name"),
+                        rs.getString("Address"),
+                        rs.getString("Postal_Code"),
+                        rs.getString("Phone"),
+                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getString("Created_By"),
+                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getString("Last_Updated_By"),
+                        rs.getInt("Division_ID")
+                );
+                customerList.add(customer);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+        return customerList;
+
+    }
+
     @FXML
     void onActionAddAppointment(ActionEvent event) throws IOException {
 
@@ -179,87 +262,48 @@ public class appointmentCalendarController implements Initializable {
         stage.show();
 
     }
-    //Observable list method for getting the data from the database for the GUI appointment table
-    public ObservableList<appointments> appointmentList(){
-        ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
-        try {
-            Connection conn = JDBC.getConnection();//Gets connection to database
-            String selectAppointments = "SELECT * FROM appointments";//Select statement
 
-            DBQuery.setPreparedStatement(conn, selectAppointments);//sets prepared statement to be the select statement
-            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+    //This will show the next 7 days from the current date for a weekly view when the Weekly View radio button is selected
+    public void onActionWeeklyView(ActionEvent actionEvent) {
 
-            ps.execute();//executes the prepared statement
+        ObservableList<appointments> weeklyAppointments = FXCollections.observableArrayList();//Creates an empty observable list for the weekly dates to be added to
+        LocalDate weeklyStartDate = LocalDate.now();//sets variable to today's date
 
-            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
+        //this makes sure that the entire appointments list is compared for the weekly list, so when switching between monthly and weekly view, it will compare all the appointments
+        ObservableList<appointments> allAppointments = appointmentList();
+        appointmentTableView.setItems(allAppointments);
 
-            appointments appointment;
-            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
-                appointment = new appointments(rs.getInt("Appointment_ID"),//collects info from database based on column names from database
-                        rs.getString("Title"),
-                        rs.getString("Description"),
-                        rs.getString("Location"),
-                        rs.getInt("Contact_ID"),
-                        rs.getString("Type"),
-                        rs.getDate("Start").toLocalDate(),
-                        rs.getTime("Start").toLocalTime(),
-                        rs.getTimestamp("Start").toLocalDateTime(),
-                        rs.getDate("End").toLocalDate(),
-                        rs.getTime("End").toLocalTime(),
-                        rs.getTimestamp("End").toLocalDateTime(),
-                        rs.getTimestamp("Create_Date").toLocalDateTime(),
-                        rs.getString("Created_By"),
-                        rs.getTimestamp("Last_Update").toLocalDateTime(),
-                        rs.getString("Last_Updated_By"),
-                        rs.getInt("Customer_ID"),
-                        rs.getInt("User_ID")
-                        );
-                appointmentList.add(appointment);
-            }
+        for(appointments app : appointmentTableView.getItems()){ //for each statement to run through the appointments list
+                if (weeklyStartDate.isBefore(app.getStateDate().plusDays(1)) && weeklyStartDate.isAfter(app.getStateDate().minusDays(7))) { //checks dates from today's dates to 7 days out
+                    weeklyAppointments.add(app);//adds the date to the observable list
+                }
         }
-        catch (Exception e){
-            System.out.println(e.getMessage()); //getMessage will print out the exception found
-        }
-        return appointmentList;
-
+        appointmentTableView.setItems(weeklyAppointments);//displays the weekly dates in the table view
     }
 
-    //Observable list method for getting the data from the database for the GUI appointment table
-    public ObservableList<customers> customerList(){
-        ObservableList <customers> customerList = FXCollections.observableArrayList();
-        try {
-            Connection conn = JDBC.getConnection();//Gets connection to database
-            String selectCustomers = "SELECT * FROM customers";//Select statement
+    //This will show the monthly view using the month of the current date when the Monthly View radio button is selected
+    public void onActionMonthlyView(ActionEvent actionEvent) {
+        ObservableList<appointments> monthlyAppointments = FXCollections.observableArrayList();//Creates an empty observable list for the monthly dates to be added to
+        LocalDate monthlyStartDate = LocalDate.now();//sets variable to today's date
 
-            DBQuery.setPreparedStatement(conn, selectCustomers);//sets prepared statement to be the select statement
-            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+        //this makes sure that the entire appointments list is compared for the monthly list, so when switching between monthly and weekly view, it will compare all the appointments
+        ObservableList<appointments> allAppointments = appointmentList();
+        appointmentTableView.setItems(allAppointments);
 
-            ps.execute();//executes the prepared statement
-
-            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
-
-            customers customer;
-            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
-                customer = new customers(rs.getInt("Customer_ID"),//collects info from database based on column names from database
-                        rs.getString("Customer_Name"),
-                        rs.getString("Address"),
-                        rs.getString("Postal_Code"),
-                        rs.getString("Phone"),
-                        rs.getTimestamp("Create_Date").toLocalDateTime(),
-                        rs.getString("Created_By"),
-                        rs.getTimestamp("Last_Update").toLocalDateTime(),
-                        rs.getString("Last_Updated_By"),
-                        rs.getInt("Division_ID")
-                );
-                customerList.add(customer);
+        for(appointments app : appointmentTableView.getItems()){//for each statement to run through the appointments list
+            if(monthlyStartDate.getYear() == app.getStateDate().getYear() && monthlyStartDate.getMonth() == app.getStateDate().getMonth()){//this will check that the month of the current date matches the month for the date in the same year
+                monthlyAppointments.add(app);//adds the date to the observable list
             }
         }
-        catch (Exception e){
-            System.out.println(e.getMessage()); //getMessage will print out the exception found
-        }
-        return customerList;
-
+        appointmentTableView.setItems(monthlyAppointments);//displays the monthly dates in the table view
     }
+
+    //Allows for a view of all Appointments in the db
+    public void onActionAllAppointmentView(ActionEvent actionEvent) {
+        ObservableList<appointments> allAppointments = appointmentList();
+        appointmentTableView.setItems(allAppointments);
+    }
+
 
 
     @FXML
@@ -299,5 +343,7 @@ public class appointmentCalendarController implements Initializable {
 
 
     }
+
+
 
 }
