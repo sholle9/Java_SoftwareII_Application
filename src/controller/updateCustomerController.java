@@ -5,6 +5,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import helper.DBQuery;
@@ -17,10 +20,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.countries;
 import model.customers;
@@ -258,48 +258,50 @@ public class updateCustomerController implements Initializable {
     @FXML
     void onActionDeleteCustomer(ActionEvent event) throws IOException {
 
-        try {
-            Connection conn = JDBC.getConnection();//Connect to database
-            String deleteAppointmentStatement = "DELETE FROM appointments WHERE Customer_ID = ?";//? are place holders indexed at 1
-            String deleteCustomerStatement = "DELETE FROM customers WHERE Customer_ID = ?";//? are place holders indexed at 1
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the customer. If you wish to delete this customer, press OK.");
+        Optional<ButtonType> result = alert.showAndWait();
+        if(result.isPresent() && result.get() == ButtonType.OK) {
 
-            DBQuery.setPreparedStatement(conn, deleteAppointmentStatement);//Create PreparedStatement
-            PreparedStatement ps2 = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
-            DBQuery.setPreparedStatement(conn, deleteCustomerStatement);//Create PreparedStatement
-            PreparedStatement ps1 = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+            try {
+                Connection conn = JDBC.getConnection();//Connect to database
+                String deleteAppointmentStatement = "DELETE FROM appointments WHERE Customer_ID = ?";//? are place holders indexed at 1
+                String deleteCustomerStatement = "DELETE FROM customers WHERE Customer_ID = ?";//? are place holders indexed at 1
 
-            String customerID = customerIdTxt.getText();
+                DBQuery.setPreparedStatement(conn, deleteAppointmentStatement);//Create PreparedStatement
+                PreparedStatement ps2 = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+                DBQuery.setPreparedStatement(conn, deleteCustomerStatement);//Create PreparedStatement
+                PreparedStatement ps1 = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
 
-            //key-value mapping for the 1 ?
-            ps2.setString(1,customerID);
-            ps1.setString(1,customerID);
+                String customerID = customerIdTxt.getText();
 
-            ps2.execute();
-            ps1.execute();//Execute PreparedStatement
+                //key-value mapping for the 1 ?
+                ps2.setString(1, customerID);
+                ps1.setString(1, customerID);
 
-            //Check row(s) affected
-            if (ps2.getUpdateCount() > 0){
-                System.out.println(ps2.getUpdateCount() + " row(s) affected for Appointments!");
+                ps2.execute();
+                ps1.execute();//Execute PreparedStatement
+
+                //Check row(s) affected
+                if (ps2.getUpdateCount() > 0) {
+                    System.out.println(ps2.getUpdateCount() + " row(s) affected for Appointments!");
+                } else {
+                    System.out.println("No change!");
+                }
+                if (ps1.getUpdateCount() > 0) {
+                    System.out.println(ps1.getUpdateCount() + " row(s) affected for Customers!");
+                } else {
+                    System.out.println("No change!");
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage()); //getMessage will print out the exception found
             }
-            else {
-                System.out.println("No change!");
-            }
-            if (ps1.getUpdateCount() > 0){
-                System.out.println(ps1.getUpdateCount() + " row(s) affected for Customers!");
-            }
-            else {
-                System.out.println("No change!");
-            }
 
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
         }
-        catch (Exception e){
-            System.out.println(e.getMessage()); //getMessage will print out the exception found
-        }
-
-        stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
 
     }
 
@@ -308,12 +310,13 @@ public class updateCustomerController implements Initializable {
 
         try{
             Connection conn = JDBC.getConnection();//Connect to database
-            String updateStatement = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Division_ID = ? WHERE Customer_ID = ?";//? are place holders indexed at 1
+            String updateStatement = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = ?, Division_ID = ? WHERE Customer_ID = ?";//? are place holders indexed at 1
 
             DBQuery.setPreparedStatement(conn, updateStatement);//Create PreparedStatement
             PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
 
             String customerName, newAddress, newPostalCode, newPhone, customerID;
+            LocalDateTime lastUpdate;
             int newDivisionID;
 
             //Get user input for updateCustomer text and combo boxes
@@ -321,6 +324,7 @@ public class updateCustomerController implements Initializable {
             newAddress = addressTxtA.getText();
             newPostalCode = postalCodeTxt.getText();
             newPhone = phoneNumberTxt.getText();
+            lastUpdate = LocalDateTime.now();
             newDivisionID = stateProvCb.getValue().getDivisionID();
             customerID = customerIdTxt.getText();
 
@@ -329,8 +333,9 @@ public class updateCustomerController implements Initializable {
             ps.setString(2,newAddress);
             ps.setString(3,newPostalCode);
             ps.setString(4,newPhone);
-            ps.setInt(5,newDivisionID);
-            ps.setString(6, customerID);
+            ps.setTimestamp(5, Timestamp.valueOf(lastUpdate));
+            ps.setInt(6,newDivisionID);
+            ps.setString(7, customerID);
 
             ps.execute();//Execute PreparedStatement
 

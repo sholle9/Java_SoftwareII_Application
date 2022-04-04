@@ -5,6 +5,8 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -80,7 +82,7 @@ public class addCustomerController {
 
         try {
             Connection conn = JDBC.getConnection();//Connect to databaseString
-            String insertStatement = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Division_ID) VALUES(?, ?, ?, ?, ?)";//? are place holders indexed at 1
+            String insertStatement = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";//? are place holders indexed at 1
 
             DBQuery.setPreparedStatement(conn, insertStatement);//Create PreparedStatement
             PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
@@ -89,6 +91,10 @@ public class addCustomerController {
             String address;
             String postalCode;
             String phoneNumber;
+            LocalDateTime createDate;
+            String createdBy;
+            LocalDateTime lastUpdated;
+            String lastUpdatedBy;
             int divisionID;
 
             //Get user input for addCustomer text and combo boxes
@@ -96,6 +102,10 @@ public class addCustomerController {
             address = addressTxtA.getText();
             postalCode = postalCodeTxt.getText();
             phoneNumber = phoneNumberTxt.getText();
+            createDate = LocalDateTime.now();
+            createdBy =  "script";
+            lastUpdated = LocalDateTime.now();
+            lastUpdatedBy = "script";
             divisionID = stateProvCb.getValue().getDivisionID();
 
             //key-value mapping for the 5 ?'s
@@ -103,7 +113,11 @@ public class addCustomerController {
             ps.setString(2,address);
             ps.setString(3,postalCode);
             ps.setString(4,phoneNumber);
-            ps.setInt(5, divisionID);
+            ps.setTimestamp(5, Timestamp.valueOf(createDate));
+            ps.setString(6,createdBy);
+            ps.setTimestamp(7, Timestamp.valueOf(lastUpdated));
+            ps.setString(8, lastUpdatedBy);
+            ps.setInt(9, divisionID);
 
             ps.execute();//Execute PreparedStatement
 
