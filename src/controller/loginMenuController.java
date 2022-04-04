@@ -5,6 +5,10 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
@@ -20,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import model.customers;
@@ -27,6 +32,7 @@ import model.users;
 
 public class loginMenuController implements Initializable {
 
+    public Label timeZoneLb;
     @FXML
     private ResourceBundle resources;
 
@@ -174,5 +180,8 @@ public class loginMenuController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
+        //This displays the location of the system in a label
+        ZoneId timeZone = ZoneId.systemDefault();
+        timeZoneLb.setText(String.valueOf(timeZone));
     }
 }
