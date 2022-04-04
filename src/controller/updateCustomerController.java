@@ -258,7 +258,7 @@ public class updateCustomerController implements Initializable {
     @FXML
     void onActionDeleteCustomer(ActionEvent event) throws IOException {
 
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the customer. If you wish to delete this customer, press OK.");
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION, "This will permanently delete the customer and all appointments with this customer. If you wish to delete this customer, press OK.");
         Optional<ButtonType> result = alert.showAndWait();
         if(result.isPresent() && result.get() == ButtonType.OK) {
 

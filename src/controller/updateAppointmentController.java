@@ -9,6 +9,7 @@ import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.util.Optional;
 import java.util.ResourceBundle;
 
 import helper.DBQuery;
@@ -211,41 +212,46 @@ public class updateAppointmentController {
 
     @FXML
     void onActionDeleteAppointment(ActionEvent event) throws IOException {
+        int selectedAppointmentID = selectedAppointment.getAppointmentID();
+        String selectedAppointmentType = selectedAppointment.getType();
+        String confirmMessage = String.format("This will permanently delete the appointment with ID: %d and Type: %s. If you wish to delete this appointment, press OK.", selectedAppointmentID, selectedAppointmentType);
 
-        try {
-            Connection conn = JDBC.getConnection();//Connect to database
-            String deleteAppointmentStatement = "DELETE FROM appointments WHERE Appointment_ID = ?";//? are place holders indexed at 1
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setContentText(confirmMessage);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == ButtonType.OK) {
+            try {
+                Connection conn = JDBC.getConnection();//Connect to database
+                String deleteAppointmentStatement = "DELETE FROM appointments WHERE Appointment_ID = ?";//? are place holders indexed at 1
 
-            DBQuery.setPreparedStatement(conn, deleteAppointmentStatement);//Create PreparedStatement
-            PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+                DBQuery.setPreparedStatement(conn, deleteAppointmentStatement);//Create PreparedStatement
+                PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
 
 
+                int appointmentID = selectedAppointment.getAppointmentID();
 
-            int appointmentID = selectedAppointment.getAppointmentID();
+                //key-value mapping for the 1 ?
+                ps.setInt(1, appointmentID);
 
-            //key-value mapping for the 1 ?
-            ps.setInt(1,appointmentID);
+                ps.execute();//Execute PreparedStatement
 
-            ps.execute();//Execute PreparedStatement
+                //Check row(s) affected
+                if (ps.getUpdateCount() > 0) {
+                    System.out.println(ps.getUpdateCount() + " row(s) affected for Appointments!");
+                } else {
+                    System.out.println("No change!");
+                }
 
-            //Check row(s) affected
-            if (ps.getUpdateCount() > 0){
-                System.out.println(ps.getUpdateCount() + " row(s) affected for Appointments!");
+            } catch (Exception e) {
+                System.out.println(e.getMessage()); //getMessage will print out the exception found
             }
-            else {
-                System.out.println("No change!");
-            }
+
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
+            stage.setScene(new Scene(scene));
+            stage.show();
 
         }
-        catch (Exception e){
-            System.out.println(e.getMessage()); //getMessage will print out the exception found
-        }
-
-        stage=(Stage) ((Button)event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
-
     }
 
     @FXML
