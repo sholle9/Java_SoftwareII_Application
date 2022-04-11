@@ -22,6 +22,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import model.appointments;
 import model.contacts;
 import model.customers;
 import model.users;
@@ -83,6 +84,51 @@ public class addAppointmentController {
 
     }
 
+    //Observable list method for getting the data from the database
+    public ObservableList<appointments> appointmentList(){
+        ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
+        try {
+            Connection conn = JDBC.getConnection();//Gets connection to database
+            String selectAppointments = "SELECT * FROM appointments";//Select statement
+
+            DBQuery.setPreparedStatement(conn, selectAppointments);//sets prepared statement to be the select statement
+            PreparedStatement ps = DBQuery.getPreparedStatement();//creates prepared statement ps
+
+            ps.execute();//executes the prepared statement
+
+            ResultSet rs = ps.getResultSet();//this is the result set of the prepared statement
+
+            appointments appointment;
+            while(rs.next()){//rs.next() goes to the next item or line of the result set rs
+                appointment = new appointments(rs.getInt("Appointment_ID"),//collects info from database based on column names from database
+                        rs.getString("Title"),
+                        rs.getString("Description"),
+                        rs.getString("Location"),
+                        rs.getInt("Contact_ID"),
+                        rs.getString("Type"),
+                        rs.getDate("Start").toLocalDate(),
+                        rs.getTime("Start").toLocalTime(),
+                        rs.getTimestamp("Start").toLocalDateTime(),
+                        rs.getDate("End").toLocalDate(),
+                        rs.getTime("End").toLocalTime(),
+                        rs.getTimestamp("End").toLocalDateTime(),
+                        rs.getTimestamp("Create_Date").toLocalDateTime(),
+                        rs.getString("Created_By"),
+                        rs.getTimestamp("Last_Update").toLocalDateTime(),
+                        rs.getString("Last_Updated_By"),
+                        rs.getInt("Customer_ID"),
+                        rs.getInt("User_ID")
+                );
+                appointmentList.add(appointment);
+            }
+        }
+        catch (Exception e){
+            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        }
+        return appointmentList;
+
+    }
+
     @FXML
     void onActionSaveNewAppointment(ActionEvent event) throws IOException {
 
@@ -137,6 +183,41 @@ public class addAppointmentController {
             ps.setInt(12,userID);
             ps.setInt(13,contactID);
 
+            for (appointments app : appointmentList()) {
+
+                //when the start time of an appointment falls within an already existing appointment time
+                if ((start.isAfter(app.getStartDateTime()) || start.isEqual(app.getStartDateTime())) && start.isBefore(app.getEndDateTime())) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setContentText("The time and/or date selected for the start of this appointment overlaps with another appointment. Please select another time or date.");
+                    alert.showAndWait();
+
+                    return;
+                }
+                //when the end time of an appointment falls with in an already existing appointment time
+                else if (end.isAfter(app.getStartDateTime()) && (end.isBefore(app.getEndDateTime()) || end.isEqual(app.getEndDateTime()))) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setContentText("The time and/or date selected for the end of this appointment overlaps with another appointment. Please select another time or date.");
+                    alert.showAndWait();
+
+                    return;
+                }
+                //when the appointment overlaps another appointment entirely
+                else if ((start.isBefore(app.getStartDateTime()) || start.isEqual(app.getStartDateTime())) && (end.isAfter(app.getEndDateTime()) || end.isEqual(app.getEndDateTime()))) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setContentText("The time and/or date selected for the start and end of this appointment overlaps with another appointment. Please select another time or date.");
+                    alert.showAndWait();
+
+                    return;
+                }
+
+
+            }
+
+
+
             ps.execute();//Execute PreparedStatement
 
             //Check row(s) affected
@@ -146,6 +227,10 @@ public class addAppointmentController {
             else {
                 System.out.println("No change!");
             }
+
+
+
+
         }
         catch (Exception e){
             System.out.println(e.getMessage()); //getMessage will print out the exception found

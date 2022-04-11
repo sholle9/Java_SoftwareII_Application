@@ -38,7 +38,7 @@
             <Button mnemonicParsing="false" onAction="#onActionCancelToCalendar" text="Cancel" />
         </buttons>
       </ButtonBar>
-      <ComboBox fx:id="startDateCb" layoutX="138.0" layoutY="319.0" onMouseClicked="#onActionStartDateCb" prefWidth="150.0" />
+      <ComboBox fx:id="startDateCb" layoutX="138.0" layoutY="319.0" prefWidth="150.0" />
       <ComboBox fx:id="userIdCb" layoutX="137.0" layoutY="440.0" prefWidth="150.0" />
       <ComboBox fx:id="customerIdCb" layoutX="138.0" layoutY="397.0" prefWidth="150.0" />
    </children>
