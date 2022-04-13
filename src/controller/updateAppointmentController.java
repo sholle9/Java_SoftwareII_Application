@@ -304,7 +304,7 @@ public class updateAppointmentController {
     @FXML
     void onActionSaveUpdatedAppointment(ActionEvent event) throws IOException {
 
-        try{
+        try {
             Connection conn = JDBC.getConnection();//Connect to databaseString
             String updateStatement = "UPDATE appointments SET Title = ?, Description = ?, Location = ?, Type = ?, Start = ?, End = ?, Last_Update = ?, Last_Updated_By = ?, Customer_ID = ?, User_ID = ?, Contact_ID = ? WHERE Appointment_ID = ?";//? are place holders indexed at 1
 
@@ -331,7 +331,7 @@ public class updateAppointmentController {
             description = descriptionTxtA.getText();
             location = locationTxt.getText();
             type = typeTxt.getText();
-            start = LocalDateTime.of(startDateCb.getSelectionModel().getSelectedItem(), startTimeCb.getSelectionModel().getSelectedItem()) ;
+            start = LocalDateTime.of(startDateCb.getSelectionModel().getSelectedItem(), startTimeCb.getSelectionModel().getSelectedItem());
             end = LocalDateTime.of(endDateCb.getSelectionModel().getSelectedItem(), endTimeCb.getSelectionModel().getSelectedItem());
             lastUpdate = LocalDateTime.now();
             lastUpdatedBy = userIdCb.getValue().getUserName();
@@ -340,50 +340,90 @@ public class updateAppointmentController {
             contactID = contactCb.getValue().getContactID();
 
             //key-value mapping for the 12 ?'s
-            ps.setString(1,title);
-            ps.setString(2,description);
-            ps.setString(3,location);
-            ps.setString(4,type);
+            ps.setString(1, title);
+            ps.setString(2, description);
+            ps.setString(3, location);
+            ps.setString(4, type);
             ps.setTimestamp(5, Timestamp.valueOf(start));
             ps.setTimestamp(6, Timestamp.valueOf(end));
             ps.setTimestamp(7, Timestamp.valueOf(lastUpdate));
-            ps.setString(8,lastUpdatedBy);
-            ps.setInt(9,customerID);
-            ps.setInt(10,userID);
-            ps.setInt(11,contactID);
+            ps.setString(8, lastUpdatedBy);
+            ps.setInt(9, customerID);
+            ps.setInt(10, userID);
+            ps.setInt(11, contactID);
             ps.setInt(12, appointmentID);
 
-            for (appointments app : appointmentList()) {
 
-                //when the start time of an appointment falls within an already existing appointment time
-                if ((start.isAfter(app.getStartDateTime()) || start.isEqual(app.getStartDateTime())) && start.isBefore(app.getEndDateTime()) && app.getAppointmentID() != appointmentID) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Dialog");
-                    alert.setContentText("The time and/or date selected for the start of this appointment overlaps with another appointment. Please select another time or date.");
-                    alert.showAndWait();
+            //the for loop will initialize if the LocalDateTime start is current or after current LocalDateTime and the end LocalDateTime is the same or after the start
+            if ((start.isEqual(LocalDateTime.now()) || start.isAfter(LocalDateTime.now()) && (end.isEqual(start) || end.isAfter(start)))) {
+                for (appointments app : appointmentList()) {
 
-                    return;
+                    //when the start time of an appointment falls within an already existing appointment time
+                    if ((start.isAfter(app.getStartDateTime()) || start.isEqual(app.getStartDateTime())) && start.isBefore(app.getEndDateTime()) && app.getAppointmentID() != appointmentID) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Dialog");
+                        alert.setContentText("The time and/or date selected for the start of this appointment overlaps with another appointment. Please select another time or date.");
+                        alert.showAndWait();
+
+                        return;
+                    }
+                    //when the end time of an appointment falls with in an already existing appointment time
+                    else if (end.isAfter(app.getStartDateTime()) && (end.isBefore(app.getEndDateTime()) || end.isEqual(app.getEndDateTime())) && app.getAppointmentID() != appointmentID) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Dialog");
+                        alert.setContentText("The time and/or date selected for the end of this appointment overlaps with another appointment. Please select another time or date.");
+                        alert.showAndWait();
+
+                        return;
+                    }
+                    //when the appointment overlaps another appointment entirely
+                    else if ((start.isBefore(app.getStartDateTime()) || start.isEqual(app.getStartDateTime())) && (end.isAfter(app.getEndDateTime()) || end.isEqual(app.getEndDateTime())) && app.getAppointmentID() != appointmentID) {
+                        Alert alert = new Alert(Alert.AlertType.ERROR);
+                        alert.setTitle("Error Dialog");
+                        alert.setContentText("The time and/or date selected for the start and end of this appointment overlaps with another appointment. Please select another time or date.");
+                        alert.showAndWait();
+
+                        return;
+                    }
+
+
                 }
-                //when the end time of an appointment falls with in an already existing appointment time
-                else if (end.isAfter(app.getStartDateTime()) && (end.isBefore(app.getEndDateTime()) || end.isEqual(app.getEndDateTime())) && app.getAppointmentID() != appointmentID) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Dialog");
-                    alert.setContentText("The time and/or date selected for the end of this appointment overlaps with another appointment. Please select another time or date.");
-                    alert.showAndWait();
+            }
+            //when the start time is < current LocalTime for today's date, error box is displayed
+            else if((startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) || startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now())) && (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) || endDateCb.getSelectionModel().getSelectedItem().isAfter(startDateCb.getSelectionModel().getSelectedItem())) && (startTimeCb.getSelectionModel().getSelectedItem().isAfter(LocalTime.now()) == false && startTimeCb.getSelectionModel().getSelectedItem().equals(LocalTime.now()) == false)){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setContentText("You must select a current or future time for your start time.");
+                alert.showAndWait();
 
-                    return;
-                }
-                //when the appointment overlaps another appointment entirely
-                else if ((start.isBefore(app.getStartDateTime()) || start.isEqual(app.getStartDateTime())) && (end.isAfter(app.getEndDateTime()) || end.isEqual(app.getEndDateTime())) && app.getAppointmentID() != appointmentID) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Error Dialog");
-                    alert.setContentText("The time and/or date selected for the start and end of this appointment overlaps with another appointment. Please select another time or date.");
-                    alert.showAndWait();
+                return;
+            }
+            //when the end time < start time and dates are correct, then an error box is displayed
+            else if((startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) || startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now())) && (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) || endDateCb.getSelectionModel().getSelectedItem().isAfter(startDateCb.getSelectionModel().getSelectedItem())) && (startTimeCb.getSelectionModel().getSelectedItem().isAfter(LocalTime.now()) || startTimeCb.getSelectionModel().getSelectedItem().equals(LocalTime.now())) && (endTimeCb.getSelectionModel().getSelectedItem().equals(startTimeCb.getSelectionModel().getSelectedItem()) == false || endTimeCb.getSelectionModel().getSelectedItem().isAfter(startTimeCb.getSelectionModel().getSelectedItem()) == false)){
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setContentText("You must select a future time for your end time.");
+                alert.showAndWait();
 
-                    return;
-                }
+                return;
+            }
+            //when start date < current date, an error box is displayed
+            else if (startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now()) == false && startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) == false) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setContentText("You must select a current or future date for your start date.");
+                alert.showAndWait();
 
+                return;
+            }
+            //when the end date < start date, an error box is displayed
+            else if ((startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now()) || startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now())) && (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) == false || endDateCb.getSelectionModel().getSelectedItem().isAfter(startDateCb.getSelectionModel().getSelectedItem()) == false)) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error Dialog");
+                alert.setContentText("You must select a current or future date for your end date.");
+                alert.showAndWait();
 
+                return;
             }
 
             ps.execute();//Execute PreparedStatement
