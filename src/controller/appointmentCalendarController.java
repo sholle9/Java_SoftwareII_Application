@@ -6,6 +6,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.time.LocalDate;
+import java.time.LocalTime;
 import java.util.ResourceBundle;
 
 import helper.DBQuery;
@@ -18,10 +19,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.RadioButton;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.appointments;
@@ -341,6 +339,32 @@ public class appointmentCalendarController implements Initializable {
         lastUpdatedByCol.setCellValueFactory(new PropertyValueFactory<>("lastUpdatedBy"));
         divisionIdCol.setCellValueFactory(new PropertyValueFactory<>("divisionID"));
 
+        int i = 0;
+
+        for(appointments app : allAppointments){
+            if(app.getStateDate().isEqual(LocalDate.now())){
+                if(app.getStartTime().equals(LocalTime.now().plusMinutes(15)) || (app.getStartTime().isBefore(LocalTime.now().plusMinutes(15))) && app.getStartTime().isAfter(LocalTime.now()) || app.getStartTime().equals(LocalTime.now())){
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.setTitle("Upcoming Appointment(s)");
+                    alert.setContentText("Upcoming appointment with ID: " + app.getAppointmentID() + ", Date: " + app.getStateDate() + ", and Time : " + app.getStartTime() + " to " + app.getEndTime() + ".");
+                    alert.showAndWait();
+                }
+                else{
+                    i++;
+                }
+            }
+            else{
+                i++;
+            }
+
+        }
+
+        if(i == allAppointments.size()){
+            Alert alert = new Alert(Alert.AlertType.INFORMATION);
+            alert.setTitle("Upcoming Appointment(s)");
+            alert.setContentText("No upcoming appointments.");
+            alert.showAndWait();
+        }
 
     }
 
