@@ -5,13 +5,11 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
+import java.time.*;
 import java.util.Locale;
 import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import helper.DBQuery;
 import helper.JDBC;
@@ -25,7 +23,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import model.customers;
 import model.users;
 
 public class loginMenuController implements Initializable {
@@ -219,5 +216,7 @@ public class loginMenuController implements Initializable {
         //This displays the location of the system in a label
         ZoneId timeZone = ZoneId.systemDefault();
         timeZoneLb.setText(String.valueOf(timeZone));
+
+
     }
 }

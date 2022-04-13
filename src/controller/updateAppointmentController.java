@@ -6,11 +6,10 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.time.*;
 import java.util.Optional;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 
 import helper.DBQuery;
 import helper.JDBC;
@@ -174,15 +173,18 @@ public class updateAppointmentController {
 
     }
 
-    //This observable list populates times from 8am to 10pm in military time in 15 minute increments
+    //This observable list populates times from 8am to 10pm EST in military time in 15 minute increments
     ObservableList<LocalTime> startTimeList() {
-        ObservableList<LocalTime> startTimeList = FXCollections.observableArrayList();
-        LocalTime start = LocalTime.of(8, 0);
-        LocalTime end = LocalTime.of(22, 0);
+        TimeZone officeZoneId = TimeZone.getTimeZone("US/Eastern");
+        ZonedDateTime officeStart = ZonedDateTime.of(LocalDate.now(), LocalTime.of(8,0),officeZoneId.toZoneId());
+        ZonedDateTime computerStart = officeStart.withZoneSameInstant(ZoneId.from(LocalDateTime.now().atZone(ZoneId.systemDefault())));
+        ZonedDateTime officeEnd = ZonedDateTime.of(LocalDate.now(), LocalTime.of(22,0),officeZoneId.toZoneId());
+        ZonedDateTime computerEnd = officeEnd.withZoneSameInstant(ZoneId.from(LocalDateTime.now().atZone(ZoneId.systemDefault())));
 
-        while (start.isBefore(end.plusSeconds(1))) {
-            start = start.plusMinutes(15);
-            startTimeList.add(start);
+        ObservableList <LocalTime> startTimeList = FXCollections.observableArrayList();
+        while (computerStart.isBefore(computerEnd.plusSeconds(1))){
+            startTimeList.add(computerStart.toLocalTime());
+            computerStart = computerStart.plusMinutes(15);
         }
         return startTimeList;
     }
