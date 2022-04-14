@@ -355,7 +355,7 @@ public class updateAppointmentController {
 
 
             //the for loop will initialize if the LocalDateTime start is current or after current LocalDateTime and the end LocalDateTime is the same or after the start
-            if ((start.isEqual(LocalDateTime.now()) || start.isAfter(LocalDateTime.now()) && (end.isEqual(start) || end.isAfter(start)))) {
+            if ((start.isEqual(LocalDateTime.now()) || start.isAfter(LocalDateTime.now()) && endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) && (endTimeCb.getSelectionModel().getSelectedItem().equals(startTimeCb.getSelectionModel().getSelectedItem()) || endTimeCb.getSelectionModel().getSelectedItem().isAfter(startTimeCb.getSelectionModel().getSelectedItem())))) {
                 for (appointments app : appointmentList()) {
 
                     //when the start time of an appointment falls within an already existing appointment time
@@ -390,7 +390,7 @@ public class updateAppointmentController {
                 }
             }
             //when the start time is < current LocalTime for today's date, error box is displayed
-            else if((startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) || startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now())) && (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) || endDateCb.getSelectionModel().getSelectedItem().isAfter(startDateCb.getSelectionModel().getSelectedItem())) && (startTimeCb.getSelectionModel().getSelectedItem().isAfter(LocalTime.now()) == false && startTimeCb.getSelectionModel().getSelectedItem().equals(LocalTime.now()) == false)){
+            else if((startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) || startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now())) && (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem())) && (startTimeCb.getSelectionModel().getSelectedItem().isAfter(LocalTime.now()) == false && startTimeCb.getSelectionModel().getSelectedItem().equals(LocalTime.now()) == false)){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
                 alert.setContentText("You must select a current or future time for your start time.");
@@ -399,7 +399,7 @@ public class updateAppointmentController {
                 return;
             }
             //when the end time < start time and dates are correct, then an error box is displayed
-            else if((startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) || startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now())) && (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) || endDateCb.getSelectionModel().getSelectedItem().isAfter(startDateCb.getSelectionModel().getSelectedItem())) && (startTimeCb.getSelectionModel().getSelectedItem().isAfter(LocalTime.now()) || startTimeCb.getSelectionModel().getSelectedItem().equals(LocalTime.now())) && (endTimeCb.getSelectionModel().getSelectedItem().equals(startTimeCb.getSelectionModel().getSelectedItem()) == false || endTimeCb.getSelectionModel().getSelectedItem().isAfter(startTimeCb.getSelectionModel().getSelectedItem()) == false)){
+            else if((startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) || startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now())) && (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem())) && (startTimeCb.getSelectionModel().getSelectedItem().isAfter(LocalTime.now()) || startTimeCb.getSelectionModel().getSelectedItem().equals(LocalTime.now())) && (endTimeCb.getSelectionModel().getSelectedItem().equals(startTimeCb.getSelectionModel().getSelectedItem()) == false || endTimeCb.getSelectionModel().getSelectedItem().isAfter(startTimeCb.getSelectionModel().getSelectedItem()) == false)){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
                 alert.setContentText("You must select a future time for your end time.");
@@ -416,11 +416,11 @@ public class updateAppointmentController {
 
                 return;
             }
-            //when the end date < start date, an error box is displayed
-            else if ((startDateCb.getSelectionModel().getSelectedItem().isAfter(LocalDate.now()) || startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now())) && (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) == false || endDateCb.getSelectionModel().getSelectedItem().isAfter(startDateCb.getSelectionModel().getSelectedItem()) == false)) {
+            //when the end date != start date, an error box is displayed
+            else if ((endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) == false)) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
-                alert.setContentText("You must select a current or future date for your end date.");
+                alert.setContentText("You must select the same date for your end date that you selected for your start date.");
                 alert.showAndWait();
 
                 return;

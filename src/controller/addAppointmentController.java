@@ -152,12 +152,14 @@ public class addAppointmentController {
             int userID;
             int contactID;
 
+
+
             //Get user input for addCustomer text and combo boxes
             title = titleTxt.getText();
             description = descriptionTxtA.getText();
             location = locationTxt.getText();
             type = typeTxt.getText();
-            start = LocalDateTime.of(startDateCb.getSelectionModel().getSelectedItem(), startTimeCb.getSelectionModel().getSelectedItem()) ;
+            start = LocalDateTime.of(startDateCb.getSelectionModel().getSelectedItem(), startTimeCb.getSelectionModel().getSelectedItem());
             end = LocalDateTime.of(endDateCb.getSelectionModel().getSelectedItem(), endTimeCb.getSelectionModel().getSelectedItem());
             createDate = LocalDateTime.now();
             createdBy = userIdCb.getValue().getUserName();
@@ -166,6 +168,12 @@ public class addAppointmentController {
             customerID = customerIdCb.getValue().getCustomerID();
             userID = userIdCb.getValue().getUserID();
             contactID = contactCb.getValue().getContactID();
+
+//            TimeZone utcZoneId = TimeZone.getTimeZone("UTC");
+//            ZonedDateTime startTimeZ = ZonedDateTime.of(LocalDate.now(), start.toLocalTime(),ZoneId.systemDefault());
+//            ZonedDateTime computerStart = startTimeZ.withZoneSameInstant(ZoneId.of(utcZoneId));
+//            ZonedDateTime officeEnd = ZonedDateTime.of(LocalDate.now(), LocalTime.of(22,0),officeZoneId.toZoneId());
+//            ZonedDateTime computerEnd = officeEnd.withZoneSameInstant(ZoneId.from(LocalDateTime.now().atZone(ZoneId.systemDefault())));
 
             //key-value mapping for the 13 ?'s
             ps.setString(1,title);
@@ -229,17 +237,17 @@ public class addAppointmentController {
 
                 return;
             }
-            //when the end date is before the start date error box displays
-            else if(endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) == false && endDateCb.getSelectionModel().getSelectedItem().isAfter(startDateCb.getSelectionModel().getSelectedItem()) == false) {
+            //when the end date is before or after the start date error box displays
+            else if(endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) == false ) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
-                alert.setContentText("The end date must be the same or after the start date.");
+                alert.setContentText("The end date must be the same as the start date.");
                 alert.showAndWait();
 
                 return;
             }
             //when the end date is => the start date, but the end time < start time an error box displays
-            else if((endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) || endDateCb.getSelectionModel().getSelectedItem().isAfter(startDateCb.getSelectionModel().getSelectedItem())) && (endTimeCb.getSelectionModel().getSelectedItem().isAfter(startTimeCb.getSelectionModel().getSelectedItem()) == false && endTimeCb.getSelectionModel().getSelectedItem().equals(startTimeCb.getSelectionModel().getSelectedItem()) == false)){
+            else if((endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem())) && (endTimeCb.getSelectionModel().getSelectedItem().isAfter(startTimeCb.getSelectionModel().getSelectedItem()) == false && endTimeCb.getSelectionModel().getSelectedItem().equals(startTimeCb.getSelectionModel().getSelectedItem()) == false)){
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle("Error Dialog");
                 alert.setContentText("The end time must be the same or after the start time.");

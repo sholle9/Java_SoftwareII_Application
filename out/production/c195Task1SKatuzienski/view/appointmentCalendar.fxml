@@ -52,6 +52,7 @@
                      <buttons>
                         <Button mnemonicParsing="false" onAction="#onActionAddAppointment" text="Add" />
                         <Button mnemonicParsing="false" onAction="#onActionUpdateAppointment" text="Update" />
+                        <Button mnemonicParsing="false" onAction="#onActionReportsBtn" text="Reports" />
                      </buttons>
                   </ButtonBar>
                   <TitledPane alignment="CENTER" animated="false" collapsible="false" layoutX="-1.0" layoutY="290.0" prefHeight="27.0" prefWidth="735.0" text="Customer" />
