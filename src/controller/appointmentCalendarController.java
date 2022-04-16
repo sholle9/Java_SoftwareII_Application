@@ -347,15 +347,10 @@ public class appointmentCalendarController implements Initializable {
     }
 
 
-    public void onActionReportsBtn(ActionEvent actionEvent) {
-        ObservableList <appointments> allAppointments = appointmentList();
-
-//        for(appointments app : allAppointments){
-//            ObservableList<appointments> customer
-//        }
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("Reports");
-        alert.setContentText("Reports");
-        alert.showAndWait();
+    public void onActionReportsBtn(ActionEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/reports.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
     }
 }
