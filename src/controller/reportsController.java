@@ -17,6 +17,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import lambdaExpressionInterfaces.reports;
 import model.appointments;
 import model.contacts;
 import model.users;
@@ -97,7 +98,7 @@ public class reportsController implements Initializable {
     public TableColumn userCustIdCol;
 
     @FXML
-    public ComboBox<appointments> appointmentTypeCb;
+    public ComboBox<String> appointmentTypeCb;
 
     @FXML
     public ComboBox<contacts> contactCb;
@@ -222,16 +223,52 @@ public class reportsController implements Initializable {
     @FXML
     void onActionAppointmentTypeGoBtn (ActionEvent event){
 
+        ObservableList<appointments> typeAppointments = FXCollections.observableArrayList();
+
+        for(appointments app : appointmentList()){
+            if(app.getType() == appointmentTypeCb.getSelectionModel().getSelectedItem()){
+                typeAppointments.add(app);
+            }
+        }
+        appointmentTypeTableView.setItems(typeAppointments);
+
+        // Lambda expression to set countLbl text
+        reports reportsCount = () -> countLbl.setText("Total: " + typeAppointments.size());
+        reportsCount.reportsCount();
+
     }
 
     @FXML
     void onActionContactGoBtn (ActionEvent event){
+        //Creates an empty list
+        ObservableList<appointments>contactAppointments = FXCollections.observableArrayList();
 
+        //goes through all the appointments in the observablelist appointmentList and adds the appointments that match the contact selected in the combo box to the contactAppointments list
+        for(appointments app : appointmentList()){
+            if(app.getContactID() == contactCb.getSelectionModel().getSelectedItem().getContactID()){
+                contactAppointments.add(app);
+            }
+        }
+
+        //displays the appointments from the contactAppointments list
+        contactTableView.setItems(contactAppointments);
     }
 
     @FXML
     void onActionUserGoBtn (ActionEvent event){
 
+        //Creates an empty list
+        ObservableList<appointments>userAppointments = FXCollections.observableArrayList();
+
+        //goes through all the appointments in the observablelist appointmentList and adds the appointments that match the user selected in the combo box to the userAppointments list
+        for(appointments app : appointmentList()){
+            if(app.getUserID() == userCb.getSelectionModel().getSelectedItem().getUserID()){
+                userAppointments.add(app);
+            }
+        }
+
+        //displays the appointments from the userAppointments list
+        userTableView.setItems(userAppointments);
     }
 
     @FXML
@@ -282,8 +319,14 @@ public class reportsController implements Initializable {
         userEndCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
         userCustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
 
+        ObservableList<String> typeAppointments = FXCollections.observableArrayList();
+
+        for (appointments app : allAppointments){
+            typeAppointments.add(app.getType());
+        }
+
         //appointmentTypeTableView combo box that will set the combo box list
-        appointmentTypeCb.setItems(allAppointments);
+        appointmentTypeCb.setItems(typeAppointments);
 
         //contactTableView combo box that will set the combo box list
         contactCb.setItems(allContacts);
@@ -291,6 +334,9 @@ public class reportsController implements Initializable {
         //userTableView combo box that will set the combo box list
         userCb.setItems(allUsers);
 
+        // Lambda expression to set countLbl text
+        reports reportsCount = () -> countLbl.setText("Total: " + allAppointments.size());
+        reportsCount.reportsCount();
 
     }
 }

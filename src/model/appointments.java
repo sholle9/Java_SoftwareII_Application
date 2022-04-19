@@ -135,9 +135,9 @@ public class appointments {
         return userID;
     }
 
-    @Override //this overrides the toString Method that automatically occurs when the combo boxes have the setItems method
-    public String toString(){
-        return (type);
-    }
+//    @Override //this overrides the toString Method that automatically occurs when the combo boxes have the setItems method
+//    public String toString(){
+//        return (type);
+//    }
 
 }
