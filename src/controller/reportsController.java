@@ -223,13 +223,17 @@ public class reportsController implements Initializable {
     @FXML
     void onActionAppointmentTypeGoBtn (ActionEvent event){
 
+        //Creates an empty ObservableList
         ObservableList<appointments> typeAppointments = FXCollections.observableArrayList();
 
+        //goes through appointmentList and adds to typeAppointments the appointments that match the type selected in the type cb
         for(appointments app : appointmentList()){
-            if(app.getType() == appointmentTypeCb.getSelectionModel().getSelectedItem()){
+            if(appointmentTypeCb.getSelectionModel().getSelectedItem().equals(app.getType())){
                 typeAppointments.add(app);
             }
         }
+
+        //sets the Table View with the list in typeAppointments
         appointmentTypeTableView.setItems(typeAppointments);
 
         // Lambda expression to set countLbl text
@@ -319,14 +323,20 @@ public class reportsController implements Initializable {
         userEndCol.setCellValueFactory(new PropertyValueFactory<>("endDateTime"));
         userCustIdCol.setCellValueFactory(new PropertyValueFactory<>("customerID"));
 
-        ObservableList<String> typeAppointments = FXCollections.observableArrayList();
+        //creates empty observableList
+        ObservableList<String> allTypeAppointments = FXCollections.observableArrayList();
 
+        //goes through allAppointments list and only adds types to allTypeAppointments if it does not already contain the String
         for (appointments app : allAppointments){
-            typeAppointments.add(app.getType());
+            if(!allTypeAppointments.contains(app.getType())){
+                allTypeAppointments.add(app.getType());
+            }
         }
 
+
+
         //appointmentTypeTableView combo box that will set the combo box list
-        appointmentTypeCb.setItems(typeAppointments);
+        appointmentTypeCb.setItems(allTypeAppointments);
 
         //contactTableView combo box that will set the combo box list
         contactCb.setItems(allContacts);
