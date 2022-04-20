@@ -308,48 +308,57 @@ public class updateCustomerController implements Initializable {
     @FXML
     void onActionSaveUpdatedCustomer(ActionEvent event) throws IOException {
 
-        try{
-            Connection conn = JDBC.getConnection();//Connect to database
-            String updateStatement = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = ?, Division_ID = ? WHERE Customer_ID = ?";//? are place holders indexed at 1
+        //Shows user an error dialog box if there is a field not filled out
+        if(firstNameTxt.getText().isBlank() || lastNameTxt.getText().isBlank() || addressTxtA.getText().isBlank() || stateProvCb.getSelectionModel().isEmpty()  || countryCb.getSelectionModel().isEmpty() || postalCodeTxt.getText().isBlank() || phoneNumberTxt.getText().isBlank()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Please fill-in each field.");
+            alert.showAndWait();
 
-            DBQuery.setPreparedStatement(conn, updateStatement);//Create PreparedStatement
-            PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
-
-            String customerName, newAddress, newPostalCode, newPhone, customerID;
-            LocalDateTime lastUpdate;
-            int newDivisionID;
-
-            //Get user input for updateCustomer text and combo boxes
-            customerName = firstNameTxt.getText() + " " + lastNameTxt.getText();
-            newAddress = addressTxtA.getText();
-            newPostalCode = postalCodeTxt.getText();
-            newPhone = phoneNumberTxt.getText();
-            lastUpdate = LocalDateTime.now();
-            newDivisionID = stateProvCb.getValue().getDivisionID();
-            customerID = customerIdTxt.getText();
-
-            //key-value mapping for the 3 ?'s
-            ps.setString(1,customerName);
-            ps.setString(2,newAddress);
-            ps.setString(3,newPostalCode);
-            ps.setString(4,newPhone);
-            ps.setTimestamp(5, Timestamp.valueOf(lastUpdate));
-            ps.setInt(6,newDivisionID);
-            ps.setString(7, customerID);
-
-            ps.execute();//Execute PreparedStatement
-
-            //Check row(s) affected
-            if (ps.getUpdateCount() > 0){
-                System.out.println(ps.getUpdateCount() + " row(s) affected!");
-            }
-            else {
-                System.out.println("No change!");
-            }
-
+            return;
         }
-        catch (Exception e){
-            System.out.println(e.getMessage()); //getMessage will print out the exception found
+        else {
+            try {
+                Connection conn = JDBC.getConnection();//Connect to database
+                String updateStatement = "UPDATE customers SET Customer_Name = ?, Address = ?, Postal_Code = ?, Phone = ?, Last_Update = ?, Division_ID = ? WHERE Customer_ID = ?";//? are place holders indexed at 1
+
+                DBQuery.setPreparedStatement(conn, updateStatement);//Create PreparedStatement
+                PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+
+                String customerName, newAddress, newPostalCode, newPhone, customerID;
+                LocalDateTime lastUpdate;
+                int newDivisionID;
+
+                //Get user input for updateCustomer text and combo boxes
+                customerName = firstNameTxt.getText() + " " + lastNameTxt.getText();
+                newAddress = addressTxtA.getText();
+                newPostalCode = postalCodeTxt.getText();
+                newPhone = phoneNumberTxt.getText();
+                lastUpdate = LocalDateTime.now();
+                newDivisionID = stateProvCb.getValue().getDivisionID();
+                customerID = customerIdTxt.getText();
+
+                //key-value mapping for the 3 ?'s
+                ps.setString(1, customerName);
+                ps.setString(2, newAddress);
+                ps.setString(3, newPostalCode);
+                ps.setString(4, newPhone);
+                ps.setTimestamp(5, Timestamp.valueOf(lastUpdate));
+                ps.setInt(6, newDivisionID);
+                ps.setString(7, customerID);
+
+                ps.execute();//Execute PreparedStatement
+
+                //Check row(s) affected
+                if (ps.getUpdateCount() > 0) {
+                    System.out.println(ps.getUpdateCount() + " row(s) affected!");
+                } else {
+                    System.out.println("No change!");
+                }
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage()); //getMessage will print out the exception found
+            }
         }
 
         stage=(Stage) ((Button)event.getSource()).getScene().getWindow();

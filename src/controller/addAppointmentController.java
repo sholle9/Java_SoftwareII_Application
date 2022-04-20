@@ -131,43 +131,52 @@ public class addAppointmentController {
     @FXML
     void onActionSaveNewAppointment(ActionEvent event) throws IOException {
 
-        try{
-            Connection conn = JDBC.getConnection();//Connect to databaseString
-            String insertStatement = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Create_Date, Created_By,Last_Update,Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//? are place holders indexed at 1
+        //Shows user an error dialog box if there is a field not filled out
+        if(titleTxt.getText().isBlank() || descriptionTxtA.getText().isBlank() || locationTxt.getText().isBlank() || contactCb.getSelectionModel().isEmpty() || typeTxt.getText().isBlank() || startDateCb.getSelectionModel().isEmpty() || startTimeCb.getSelectionModel().isEmpty() || endDateCb.getSelectionModel().isEmpty() || endTimeCb.getSelectionModel().isEmpty() || customerIdCb.getSelectionModel().isEmpty() || userIdCb.getSelectionModel().isEmpty()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Please fill-in each field.");
+            alert.showAndWait();
 
-            DBQuery.setPreparedStatement(conn, insertStatement);//Create PreparedStatement
-            PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+            return;
+        }
+        else {
+            try {
+                Connection conn = JDBC.getConnection();//Connect to databaseString
+                String insertStatement = "INSERT INTO appointments(Title, Description, Location, Type, Start, End, Create_Date, Created_By,Last_Update,Last_Updated_By, Customer_ID, User_ID, Contact_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";//? are place holders indexed at 1
 
-            String title;
-            String description;
-            String location;
-            String type;
-            LocalDateTime start;
-            LocalDateTime end;
-            LocalDateTime createDate;
-            String createdBy;
-            LocalDateTime lastUpdate;
-            String lastUpdatedBy;
-            int customerID;
-            int userID;
-            int contactID;
+                DBQuery.setPreparedStatement(conn, insertStatement);//Create PreparedStatement
+                PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+
+                String title;
+                String description;
+                String location;
+                String type;
+                LocalDateTime start;
+                LocalDateTime end;
+                LocalDateTime createDate;
+                String createdBy;
+                LocalDateTime lastUpdate;
+                String lastUpdatedBy;
+                int customerID;
+                int userID;
+                int contactID;
 
 
-
-            //Get user input for addCustomer text and combo boxes
-            title = titleTxt.getText();
-            description = descriptionTxtA.getText();
-            location = locationTxt.getText();
-            type = typeTxt.getText();
-            start = LocalDateTime.of(startDateCb.getSelectionModel().getSelectedItem(), startTimeCb.getSelectionModel().getSelectedItem());
-            end = LocalDateTime.of(endDateCb.getSelectionModel().getSelectedItem(), endTimeCb.getSelectionModel().getSelectedItem());
-            createDate = LocalDateTime.now();
-            createdBy = userIdCb.getValue().getUserName();
-            lastUpdate = LocalDateTime.now();
-            lastUpdatedBy = userIdCb.getValue().getUserName();
-            customerID = customerIdCb.getValue().getCustomerID();
-            userID = userIdCb.getValue().getUserID();
-            contactID = contactCb.getValue().getContactID();
+                //Get user input for addCustomer text and combo boxes
+                title = titleTxt.getText();
+                description = descriptionTxtA.getText();
+                location = locationTxt.getText();
+                type = typeTxt.getText();
+                start = LocalDateTime.of(startDateCb.getSelectionModel().getSelectedItem(), startTimeCb.getSelectionModel().getSelectedItem());
+                end = LocalDateTime.of(endDateCb.getSelectionModel().getSelectedItem(), endTimeCb.getSelectionModel().getSelectedItem());
+                createDate = LocalDateTime.now();
+                createdBy = userIdCb.getValue().getUserName();
+                lastUpdate = LocalDateTime.now();
+                lastUpdatedBy = userIdCb.getValue().getUserName();
+                customerID = customerIdCb.getValue().getCustomerID();
+                userID = userIdCb.getValue().getUserID();
+                contactID = contactCb.getValue().getContactID();
 
 //            TimeZone utcZoneId = TimeZone.getTimeZone("UTC");
 //            ZonedDateTime startTimeZ = ZonedDateTime.of(LocalDate.now(), start.toLocalTime(),ZoneId.systemDefault());
@@ -175,23 +184,23 @@ public class addAppointmentController {
 //            ZonedDateTime officeEnd = ZonedDateTime.of(LocalDate.now(), LocalTime.of(22,0),officeZoneId.toZoneId());
 //            ZonedDateTime computerEnd = officeEnd.withZoneSameInstant(ZoneId.from(LocalDateTime.now().atZone(ZoneId.systemDefault())));
 
-            //key-value mapping for the 13 ?'s
-            ps.setString(1,title);
-            ps.setString(2,description);
-            ps.setString(3,location);
-            ps.setString(4,type);
-            ps.setTimestamp(5, Timestamp.valueOf(start));
-            ps.setTimestamp(6, Timestamp.valueOf(end));
-            ps.setTimestamp(7, Timestamp.valueOf(createDate));
-            ps.setString(8,createdBy);
-            ps.setTimestamp(9, Timestamp.valueOf(lastUpdate));
-            ps.setString(10,lastUpdatedBy);
-            ps.setInt(11,customerID);
-            ps.setInt(12,userID);
-            ps.setInt(13,contactID);
+                //key-value mapping for the 13 ?'s
+                ps.setString(1, title);
+                ps.setString(2, description);
+                ps.setString(3, location);
+                ps.setString(4, type);
+                ps.setTimestamp(5, Timestamp.valueOf(start));
+                ps.setTimestamp(6, Timestamp.valueOf(end));
+                ps.setTimestamp(7, Timestamp.valueOf(createDate));
+                ps.setString(8, createdBy);
+                ps.setTimestamp(9, Timestamp.valueOf(lastUpdate));
+                ps.setString(10, lastUpdatedBy);
+                ps.setInt(11, customerID);
+                ps.setInt(12, userID);
+                ps.setInt(13, contactID);
 
-            //the for loop will initialize if the LocalDateTime start is current or after current LocalDateTime and the end LocalDateTime is the same or after the start
-            if((start.isEqual(LocalDateTime.now()) || start.isAfter(LocalDateTime.now()) && (end.isEqual(start) || end.isAfter(start)))) {
+                //the for loop will initialize if the LocalDateTime start is current or after current LocalDateTime and the end LocalDateTime is the same or after the start
+                if ((start.isEqual(LocalDateTime.now()) || start.isAfter(LocalDateTime.now()) && (end.isEqual(start) || end.isAfter(start)))) {
                     for (appointments app : appointmentList()) {
 
                         //when the start time of an appointment falls within an already existing appointment time
@@ -226,52 +235,48 @@ public class addAppointmentController {
                     }
 
 
+                }
+                //when that date is the current date it requires the time to be the same or after the current time
+                else if (startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) && (startTimeCb.getSelectionModel().getSelectedItem().equals(LocalTime.now()) == false && startTimeCb.getSelectionModel().getSelectedItem().isAfter(LocalTime.now()) == false)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setContentText("The start time must be the same or after the current time.");
+                    alert.showAndWait();
 
+                    return;
+                }
+                //when the end date is before or after the start date error box displays
+                else if (endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) == false) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setContentText("The end date must be the same as the start date.");
+                    alert.showAndWait();
+
+                    return;
+                }
+                //when the end date is => the start date, but the end time < start time an error box displays
+                else if ((endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem())) && (endTimeCb.getSelectionModel().getSelectedItem().isAfter(startTimeCb.getSelectionModel().getSelectedItem()) == false && endTimeCb.getSelectionModel().getSelectedItem().equals(startTimeCb.getSelectionModel().getSelectedItem()) == false)) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Error Dialog");
+                    alert.setContentText("The end time must be the same or after the start time.");
+                    alert.showAndWait();
+
+                    return;
+                }
+
+                ps.execute();//Execute PreparedStatement
+
+                //Check row(s) affected
+                if (ps.getUpdateCount() > 0) {
+                    System.out.println(ps.getUpdateCount() + " row(s) affected!");
+                } else {
+                    System.out.println("No change!");
+                }
+
+
+            } catch (Exception e) {
+                System.out.println(e.getMessage()); //getMessage will print out the exception found
             }
-            //when that date is the current date it requires the time to be the same or after the current time
-            else if(startDateCb.getSelectionModel().getSelectedItem().isEqual(LocalDate.now()) && (startTimeCb.getSelectionModel().getSelectedItem().equals(LocalTime.now()) == false && startTimeCb.getSelectionModel().getSelectedItem().isAfter(LocalTime.now()) == false)){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Dialog");
-                alert.setContentText("The start time must be the same or after the current time.");
-                alert.showAndWait();
-
-                return;
-            }
-            //when the end date is before or after the start date error box displays
-            else if(endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem()) == false ) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Dialog");
-                alert.setContentText("The end date must be the same as the start date.");
-                alert.showAndWait();
-
-                return;
-            }
-            //when the end date is => the start date, but the end time < start time an error box displays
-            else if((endDateCb.getSelectionModel().getSelectedItem().isEqual(startDateCb.getSelectionModel().getSelectedItem())) && (endTimeCb.getSelectionModel().getSelectedItem().isAfter(startTimeCb.getSelectionModel().getSelectedItem()) == false && endTimeCb.getSelectionModel().getSelectedItem().equals(startTimeCb.getSelectionModel().getSelectedItem()) == false)){
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error Dialog");
-                alert.setContentText("The end time must be the same or after the start time.");
-                alert.showAndWait();
-
-                return;
-            }
-
-            ps.execute();//Execute PreparedStatement
-
-            //Check row(s) affected
-            if (ps.getUpdateCount() > 0){
-                System.out.println(ps.getUpdateCount() + " row(s) affected!");
-            }
-            else {
-                System.out.println("No change!");
-            }
-
-
-
-
-        }
-        catch (Exception e){
-            System.out.println(e.getMessage()); //getMessage will print out the exception found
         }
 
         stage=(Stage) ((Button)event.getSource()).getScene().getWindow();

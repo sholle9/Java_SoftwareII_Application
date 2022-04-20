@@ -19,10 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.appointments;
 import model.countries;
@@ -80,59 +77,67 @@ public class addCustomerController {
     @FXML
     void onActionSaveNewCustomer(ActionEvent event) throws IOException {
 
-        try {
-            Connection conn = JDBC.getConnection();//Connect to databaseString
-            String insertStatement = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";//? are place holders indexed at 1
+        //Shows user an error dialog box if there is a field not filled out
+        if(firstNameTxt.getText().isBlank() || lastNameTxt.getText().isBlank() || addressTxtA.getText().isBlank() || stateProvCb.getSelectionModel().isEmpty()  || countryCb.getSelectionModel().isEmpty() || postalCodeTxt.getText().isBlank() || phoneNumberTxt.getText().isBlank()){
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("Please fill-in each field.");
+            alert.showAndWait();
 
-            DBQuery.setPreparedStatement(conn, insertStatement);//Create PreparedStatement
-            PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
+            return;
+        }
+        else {
+            try {
+                Connection conn = JDBC.getConnection();//Connect to databaseString
+                String insertStatement = "INSERT INTO customers(Customer_Name, Address, Postal_Code, Phone, Create_Date, Created_By, Last_Update, Last_Updated_By, Division_ID) VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)";//? are place holders indexed at 1
 
-            String customerName;
-            String address;
-            String postalCode;
-            String phoneNumber;
-            LocalDateTime createDate;
-            String createdBy;
-            LocalDateTime lastUpdated;
-            String lastUpdatedBy;
-            int divisionID;
+                DBQuery.setPreparedStatement(conn, insertStatement);//Create PreparedStatement
+                PreparedStatement ps = DBQuery.getPreparedStatement();//Retrieving PreparedStatement
 
-            //Get user input for addCustomer text and combo boxes
-            customerName = firstNameTxt.getText() + " " + lastNameTxt.getText();
-            address = addressTxtA.getText();
-            postalCode = postalCodeTxt.getText();
-            phoneNumber = phoneNumberTxt.getText();
-            createDate = LocalDateTime.now();
-            createdBy =  "script";
-            lastUpdated = LocalDateTime.now();
-            lastUpdatedBy = "script";
-            divisionID = stateProvCb.getValue().getDivisionID();
+                String customerName;
+                String address;
+                String postalCode;
+                String phoneNumber;
+                LocalDateTime createDate;
+                String createdBy;
+                LocalDateTime lastUpdated;
+                String lastUpdatedBy;
+                int divisionID;
 
-            //key-value mapping for the 5 ?'s
-            ps.setString(1,customerName);
-            ps.setString(2,address);
-            ps.setString(3,postalCode);
-            ps.setString(4,phoneNumber);
-            ps.setTimestamp(5, Timestamp.valueOf(createDate));
-            ps.setString(6,createdBy);
-            ps.setTimestamp(7, Timestamp.valueOf(lastUpdated));
-            ps.setString(8, lastUpdatedBy);
-            ps.setInt(9, divisionID);
+                //Get user input for addCustomer text and combo boxes
+                customerName = firstNameTxt.getText() + " " + lastNameTxt.getText();
+                address = addressTxtA.getText();
+                postalCode = postalCodeTxt.getText();
+                phoneNumber = phoneNumberTxt.getText();
+                createDate = LocalDateTime.now();
+                createdBy = "script";
+                lastUpdated = LocalDateTime.now();
+                lastUpdatedBy = "script";
+                divisionID = stateProvCb.getValue().getDivisionID();
 
-            ps.execute();//Execute PreparedStatement
+                //key-value mapping for the 5 ?'s
+                ps.setString(1, customerName);
+                ps.setString(2, address);
+                ps.setString(3, postalCode);
+                ps.setString(4, phoneNumber);
+                ps.setTimestamp(5, Timestamp.valueOf(createDate));
+                ps.setString(6, createdBy);
+                ps.setTimestamp(7, Timestamp.valueOf(lastUpdated));
+                ps.setString(8, lastUpdatedBy);
+                ps.setInt(9, divisionID);
 
-            //Check row(s) affected
-            if (ps.getUpdateCount() > 0){
-                System.out.println(ps.getUpdateCount() + " row(s) affected!");
-            }
-            else {
-                System.out.println("No change!");
+                ps.execute();//Execute PreparedStatement
+
+                //Check row(s) affected
+                if (ps.getUpdateCount() > 0) {
+                    System.out.println(ps.getUpdateCount() + " row(s) affected!");
+                } else {
+                    System.out.println("No change!");
+                }
+            } catch (Exception e) {
+                System.out.println(e.getMessage()); //getMessage will print out the exception found
             }
         }
-        catch (Exception e){
-            System.out.println(e.getMessage()); //getMessage will print out the exception found
-        }
-
 
 
         stage=(Stage) ((Button)event.getSource()).getScene().getWindow();

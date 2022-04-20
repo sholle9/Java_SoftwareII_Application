@@ -195,6 +195,13 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    public void onActionReportsBtn(ActionEvent event) throws IOException {
+        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+        scene = FXMLLoader.load(getClass().getResource("/view/reports.fxml"));
+        stage.setScene(new Scene(scene));
+        stage.show();
+    }
+
     @FXML
     void onActionAddAppointment(ActionEvent event) throws IOException {
 
@@ -228,40 +235,64 @@ public class appointmentCalendarController implements Initializable {
     @FXML
     void onActionUpdateAppointment(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/updateAppointment.fxml"));
-        Parent appointmentTableViewParent = loader.load();
-        Scene appointmentTableViewScene = new Scene(appointmentTableViewParent);
+        //presents an error message if there isn't an appointment record selected
+        if(appointmentTableView.getSelectionModel().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("You must select an appointment you wish to update.");
+            alert.showAndWait();
 
-        //Access the updateAppointmentController to call the appointmentDataTransfer method
-        updateAppointmentController controller = loader.getController();
-        controller.appointmentDataTransfer(appointmentTableView.getSelectionModel().getSelectedItem());
+            return;
+
+        }
+        else {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/updateAppointment.fxml"));
+            Parent appointmentTableViewParent = loader.load();
+            Scene appointmentTableViewScene = new Scene(appointmentTableViewParent);
+
+            //Access the updateAppointmentController to call the appointmentDataTransfer method
+            updateAppointmentController controller = loader.getController();
+            controller.appointmentDataTransfer(appointmentTableView.getSelectionModel().getSelectedItem());
 
 
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/updateAppointment.fxml"));
-        stage.setScene(appointmentTableViewScene);
-        stage.show();
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/updateAppointment.fxml"));
+            stage.setScene(appointmentTableViewScene);
+            stage.show();
+        }
 
     }
 
     @FXML
     void onActionUpdateCustomer(ActionEvent event) throws IOException {
 
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(getClass().getResource("/view/updateCustomer.fxml"));
-        Parent customerTableViewParent = loader.load();
-        Scene customerTableViewScene = new Scene(customerTableViewParent);
+        //presents an error message if there isn't a customer record selected
+        if(customerTableView.getSelectionModel().isEmpty()) {
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Error Dialog");
+            alert.setContentText("You must select a customer you wish to update.");
+            alert.showAndWait();
 
-        //Access the updateCustomerController to call the customerDataTransfer method
-        updateCustomerController controller = loader.getController();
-        controller.customerDataTransfer(customerTableView.getSelectionModel().getSelectedItem());
+            return;
+
+        }
+        else {
+            FXMLLoader loader = new FXMLLoader();
+            loader.setLocation(getClass().getResource("/view/updateCustomer.fxml"));
+            Parent customerTableViewParent = loader.load();
+            Scene customerTableViewScene = new Scene(customerTableViewParent);
+
+            //Access the updateCustomerController to call the customerDataTransfer method
+            updateCustomerController controller = loader.getController();
+            controller.customerDataTransfer(customerTableView.getSelectionModel().getSelectedItem());
 
 
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/updateCustomer.fxml"));
-        stage.setScene(customerTableViewScene);
-        stage.show();
+            stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
+            scene = FXMLLoader.load(getClass().getResource("/view/updateCustomer.fxml"));
+            stage.setScene(customerTableViewScene);
+            stage.show();
+        }
 
     }
 
@@ -347,10 +378,5 @@ public class appointmentCalendarController implements Initializable {
     }
 
 
-    public void onActionReportsBtn(ActionEvent event) throws IOException {
-        stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
-        scene = FXMLLoader.load(getClass().getResource("/view/reports.fxml"));
-        stage.setScene(new Scene(scene));
-        stage.show();
-    }
+
 }
