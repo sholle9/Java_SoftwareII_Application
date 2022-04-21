@@ -1,6 +1,8 @@
 package controller;
 
+import java.io.FileWriter;
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -22,6 +24,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
+import lambdaExpressionInterfaces.loginMenu;
 import model.appointments;
 import model.users;
 
@@ -161,6 +164,10 @@ public class loginMenuController implements Initializable {
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
 
+        String filename = "src/files/login_activity.txt";//Filename variable
+        FileWriter fwriter = new FileWriter(filename, true); //creates a filewriter object
+        PrintWriter outputFile = new PrintWriter(fwriter); //creates and opens file
+
         //finds the resource bundles with rb and match them with the default language of the system
         ResourceBundle rb = ResourceBundle.getBundle("rb", Locale.getDefault());
 
@@ -204,21 +211,33 @@ public class loginMenuController implements Initializable {
 
                         //so long as the input password matches the database password this will navigate to the appointmentCalendar
                         if (password.equals(passwordDB)) {
+                            //writes to the login_activity.txt
+                            outputFile.println("Username: " + correctUserName + " Date: " + LocalDate.now() + " Time: " + LocalTime.now() + " Login Successful!");
+
                             stage = (Stage) ((Button) event.getSource()).getScene().getWindow();//cast the window as a stage
                             scene = FXMLLoader.load(getClass().getResource("/view/appointmentCalendar.fxml"));//stage(location) the button should go to
                             stage.setScene(new Scene(scene));
                             stage.show();//actually causes the stage to appear
+
+                            //closes the activity_login.txt file
+                            outputFile.close();
+
 
                             break;
                         }
                         //this is when the password input and password in the database do not match
                         //AN ERROR MESSAGE WILL BE DISPLAYED
                         else if (password != passwordDB) {
-                            //System.out.println("Incorrect password");
+                            //writes to the login_activity.txt
+                            outputFile.println("Username: " + userName + " Date: " + LocalDate.now() + " Time: " + LocalTime.now() + " Login Unsuccessful!");
+
                             Alert alert = new Alert(Alert.AlertType.ERROR);
                             alert.setTitle(rb.getString("errorTitle"));
                             alert.setContentText(rb.getString("incorrectPassword"));
                             alert.showAndWait();
+
+                            //closes the activity_login.txt file
+                            outputFile.close();
 
                             break;
                         }
@@ -233,11 +252,16 @@ public class loginMenuController implements Initializable {
             //when the correctUserName is not reassigned because the input in the userNameTxt does not match the usernames found in the db
             //AN ERROR MESSAGE WILL BE DISPLAYED
             else {
-                //System.out.println("Incorrect username");
+                //writes to the login_activity.txt
+                outputFile.println("Username: " + userName + " Date: " + LocalDate.now() + " Time: " + LocalTime.now() + " Login Unsuccessful!");
+
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.setTitle(rb.getString("errorTitle"));
                 alert.setContentText(rb.getString("incorrectUsername"));
                 alert.showAndWait();
+
+                //closes the activity_login.txt file
+                outputFile.close();
             }
 
         }
@@ -292,9 +316,11 @@ public class loginMenuController implements Initializable {
             loginBtn.setText(rb.getString("loginButton"));
         }
 
-        //This displays the location of the system in a label
-        ZoneId timeZone = ZoneId.systemDefault();
-        timeZoneLb.setText(String.valueOf(timeZone));
+
+
+        //Lambda Expression that displays the location of the system in a label
+        loginMenu timeZone = () -> ZoneId.systemDefault();
+        timeZoneLb.setText(String.valueOf(timeZone.timeZone()));
 
 
     }

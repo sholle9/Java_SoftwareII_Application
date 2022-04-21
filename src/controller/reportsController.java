@@ -291,6 +291,7 @@ public class reportsController implements Initializable {
         stage.show();//actually causes the stage to appear
     }
 
+    //Creates a method that returns a list of months with the month data type
     ObservableList<Month> monthList(){
         ObservableList<Month>monthList = FXCollections.observableArrayList();
         Month start = Month.JANUARY;
@@ -311,10 +312,7 @@ public class reportsController implements Initializable {
         ObservableList <appointments> allAppointments = appointmentList();
         ObservableList<users> allUsers = userList();//call the userList method which will pull from the database
         ObservableList<contacts>allContacts = contactList();//call the contactList method which will pull from the database
-
-        //ObservableList<Month> months = (ObservableList<Month>) FXCollections.observableList(Arrays.asList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"));
-
-
+        ObservableList <Month> monthsList = monthList();//calls the monthList method
 
         appointmentTypeTableView.setItems(allAppointments);
         contactTableView.setItems(allAppointments);
@@ -356,11 +354,6 @@ public class reportsController implements Initializable {
                 allTypeAppointments.add(app.getType());
             }
         }
-
-        //creates empty observable list
-        ObservableList <Month> monthsList = monthList();
-
-
 
         //appointmentTypeTableView combo box that will set the combo box list
         appointmentTypeCb.setItems(allTypeAppointments);
