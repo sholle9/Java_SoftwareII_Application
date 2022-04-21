@@ -164,7 +164,7 @@ public class loginMenuController implements Initializable {
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
 
-        String filename = "src/files/login_activity.txt";//Filename variable
+        String filename = "Files/login_activity.txt";//Filename variable
         FileWriter fwriter = new FileWriter(filename, true); //creates a filewriter object
         PrintWriter outputFile = new PrintWriter(fwriter); //creates and opens file
 
@@ -222,6 +222,36 @@ public class loginMenuController implements Initializable {
                             //closes the activity_login.txt file
                             outputFile.close();
 
+                            ObservableList<appointments> allAppointments = appointmentList();//calls the appointmentList method for the observable list allAppointments
+
+                            int i = 0;
+
+                            //for loop to go through each appointment to see if there are appointments within 15 minutes of pressing the login button
+                            for(appointments app : allAppointments){
+                                if(app.getStateDate().isEqual(LocalDate.now())){
+                                    if(app.getStartTime().equals(LocalTime.now()) || (app.getStartTime().isAfter(LocalTime.now()) && app.getStartTime().isBefore(LocalTime.now().plusMinutes(15))) || app.getStartTime().equals(LocalTime.now().plusMinutes(15))){
+                                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                        alert.setTitle("Upcoming Appointment(s)");
+                                        alert.setContentText("Upcoming appointment with ID: " + app.getAppointmentID() + ", Date: " + app.getStateDate() + ", and Time : " + app.getStartTime() + " to " + app.getEndTime() + ".");
+                                        alert.showAndWait();
+                                    }
+                                    else{
+                                        i++;
+                                    }
+                                }
+                                else{
+                                    i++;
+                                }
+
+                            }
+
+                            if(i == allAppointments.size()){
+                                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                                alert.setTitle("Upcoming Appointment(s)");
+                                alert.setContentText("No upcoming appointments.");
+                                alert.showAndWait();
+                            }
+
 
                             break;
                         }
@@ -268,35 +298,7 @@ public class loginMenuController implements Initializable {
 
 
 
-        ObservableList<appointments> allAppointments = appointmentList();//calls the appointmentList method for the observable list allAppointments
 
-        int i = 0;
-
-        //for loop to go through each appointment to see if there are appointments within 15 minutes of pressing the login button
-        for(appointments app : allAppointments){
-            if(app.getStateDate().isEqual(LocalDate.now())){
-                if(app.getStartTime().equals(LocalTime.now()) || (app.getStartTime().isAfter(LocalTime.now()) && app.getStartTime().isBefore(LocalTime.now().plusMinutes(15))) || app.getStartTime().equals(LocalTime.now().plusMinutes(15))){
-                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
-                    alert.setTitle("Upcoming Appointment(s)");
-                    alert.setContentText("Upcoming appointment with ID: " + app.getAppointmentID() + ", Date: " + app.getStateDate() + ", and Time : " + app.getStartTime() + " to " + app.getEndTime() + ".");
-                    alert.showAndWait();
-                }
-                else{
-                    i++;
-                }
-            }
-            else{
-                i++;
-            }
-
-        }
-
-        if(i == allAppointments.size()){
-            Alert alert = new Alert(Alert.AlertType.INFORMATION);
-            alert.setTitle("Upcoming Appointment(s)");
-            alert.setContentText("No upcoming appointments.");
-            alert.showAndWait();
-        }
 
     }
 
