@@ -27,6 +27,9 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.time.LocalDate;
+import java.time.Month;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class reportsController implements Initializable {
@@ -106,8 +109,12 @@ public class reportsController implements Initializable {
     @FXML
     public ComboBox<users> userCb;
 
+    @FXML
+    public ComboBox monthCb;
+
     Stage stage;
     Parent scene;
+
 
     //Observable list method for getting the data from the database for the GUI appointment table
     public ObservableList<appointments> appointmentList(){
@@ -228,7 +235,7 @@ public class reportsController implements Initializable {
 
         //goes through appointmentList and adds to typeAppointments the appointments that match the type selected in the type cb
         for(appointments app : appointmentList()){
-            if(appointmentTypeCb.getSelectionModel().getSelectedItem().equals(app.getType())){
+            if(appointmentTypeCb.getSelectionModel().getSelectedItem().equals(app.getType()) && monthCb.getSelectionModel().getSelectedItem().equals(app.getStateDate().getMonth())){
                 typeAppointments.add(app);
             }
         }
@@ -284,12 +291,29 @@ public class reportsController implements Initializable {
         stage.show();//actually causes the stage to appear
     }
 
+    ObservableList<Month> monthList(){
+        ObservableList<Month>monthList = FXCollections.observableArrayList();
+        Month start = Month.JANUARY;
+        Month end = Month.DECEMBER ;
+
+        int i = 0;
+        while (i < end.getValue()){
+            monthList.add(start);
+            start = start.plus(1);
+            i++;
+        }
+        return monthList;
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        //Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")
         ObservableList <appointments> allAppointments = appointmentList();
         ObservableList<users> allUsers = userList();//call the userList method which will pull from the database
         ObservableList<contacts>allContacts = contactList();//call the contactList method which will pull from the database
+
+        //ObservableList<Month> months = (ObservableList<Month>) FXCollections.observableList(Arrays.asList("JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"));
+
 
 
         appointmentTypeTableView.setItems(allAppointments);
@@ -333,10 +357,16 @@ public class reportsController implements Initializable {
             }
         }
 
+        //creates empty observable list
+        ObservableList <Month> monthsList = monthList();
+
 
 
         //appointmentTypeTableView combo box that will set the combo box list
         appointmentTypeCb.setItems(allTypeAppointments);
+
+        //sets the months combo box with the months list
+        monthCb.setItems(monthsList);
 
         //contactTableView combo box that will set the combo box list
         contactCb.setItems(allContacts);
