@@ -12,8 +12,9 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Objects;
 import java.util.Scanner;
-
+/**This class creates an application*/
 public class Main extends Application {
+
 
     @Override
     public void start(Stage stage) throws Exception{

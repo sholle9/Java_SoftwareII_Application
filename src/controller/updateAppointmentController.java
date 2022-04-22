@@ -23,7 +23,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
 import model.*;
-
+/**This class is the controller for the updateAppointments.fxml view*/
 public class updateAppointmentController {
 
     @FXML
@@ -73,6 +73,10 @@ public class updateAppointmentController {
     Stage stage;
     Parent scene;
 
+    /**Observable list method for getting the data form the contacts table from the database.
+     This will fill the ObservableList contactList with the info from the contacts table and return the ObservableList contactList.
+     @return Returns the ObservableList contactList.
+     */
     //Observable list method for getting the data from the database for the GUI contact combo box
     public ObservableList<contacts> contactList(){
         ObservableList <contacts> contactList = FXCollections.observableArrayList();
@@ -102,6 +106,10 @@ public class updateAppointmentController {
 
     }
 
+    /**Observable list method for getting the data form the users table from the database.
+     This will fill the ObservableList userList with the info from the users table and return the ObservableList userList.
+     @return Returns the ObservableList userList.
+     */
     //Observable list method for getting the data from the database for the GUI user combo box
     public ObservableList<users> userList(){
         ObservableList <users> userList = FXCollections.observableArrayList();
@@ -137,6 +145,10 @@ public class updateAppointmentController {
 
     }
 
+    /**Observable list method for getting the data form the customers table from the database.
+     This will fill the ObservableList customerList with the info from the customers table and return the ObservableList customerList.
+     @return Returns the ObservableList customerList.
+     */
     //Observable list method for getting the data from the database for the GUI contact combo box
     public ObservableList<customers> customerList(){
         ObservableList <customers> customerList = FXCollections.observableArrayList();
@@ -173,6 +185,10 @@ public class updateAppointmentController {
 
     }
 
+    /**This is the startTimeList ObservableList Method.
+     This observableList populates times from 8am to 10pm in EST in military time in 15 minute increments and adds them to the ObservableList startTimeList.
+     @return Returns the observableList startTimeList.
+     */
     //This observable list populates times from 8am to 10pm EST in military time in 15 minute increments
     ObservableList<LocalTime> startTimeList() {
         TimeZone officeZoneId = TimeZone.getTimeZone("US/Eastern");
@@ -189,6 +205,10 @@ public class updateAppointmentController {
         return startTimeList;
     }
 
+    /**This is the startDateList ObservableList Method.
+     This observableList populates dates from 2020-1-1 till end of 2023 and adds them to the ObservableList startDateList.
+     @return Returns the observableList startDateList.
+     */
     //This observable list populates dates from 2020-1-1 till end of 2023
     ObservableList<LocalDate> startDateList(){
         ObservableList<LocalDate>startDateList = FXCollections.observableArrayList();
@@ -202,6 +222,10 @@ public class updateAppointmentController {
         return startDateList;
     }
 
+    /**Observable list method for getting the data form the appointments table from the database.
+     This will fill the ObservableList appointmentList with the info from the appointments table and return the ObservableList appointmentList.
+     @return Returns the ObservableList appointmentList.
+     */
     //Observable list method for getting the data from the database
     public ObservableList<appointments> appointmentList(){
         ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
@@ -247,6 +271,9 @@ public class updateAppointmentController {
 
     }
 
+    /** This is the onAction for the addAppointment Cancel Button.
+     When the cancel button is clicked, the user is redirected to the appointmentCalendar without saving the inputted info.
+     */
     @FXML
     void onActionCancelToCalendar(ActionEvent event) throws IOException {
 
@@ -257,6 +284,10 @@ public class updateAppointmentController {
 
     }
 
+    /** This is the onAction method for the Delete button on updateAppointment screen.
+     This removes the selected appointment permanently.The user is presented with a Confirmation dialog box to ensure they wish to delete the appointment.
+     The appointment will be removed from the appointments table in the database when the 'OK' button is selected on the dialog box, otherwise no action will occur.
+     */
     @FXML
     void onActionDeleteAppointment(ActionEvent event) throws IOException {
         int selectedAppointmentID = selectedAppointment.getAppointmentID();
@@ -301,6 +332,12 @@ public class updateAppointmentController {
         }
     }
 
+    /** This is the onAction method for the Save button.
+     When the Save button is clicked, the information entered in the text fields (except the id field) are inserted into the appointments table in the database.
+     An IOException occurs if no values or incorrect values are entered. The try/catch method is used to create an error message asking for correct values.
+     If/else statements are used to make sure that date and time are within the business hours and at a future/ current time.
+     In the future, resolve the issue that the appointment date needs to be updated to a future time and date because this may just be an edit to correct an appointment not reschedule.
+     */
     @FXML
     void onActionSaveUpdatedAppointment(ActionEvent event) throws IOException {
 
@@ -456,6 +493,9 @@ public class updateAppointmentController {
 
     }
 
+    /**This is the method to initialize the form with appointment data selected from appointmentCalendarController.
+     This method is called in the appointmentCalendarController under the onActionUpdateAppointment.
+     */
     //this will initialize appointment data selected from appointmentCalendarController
     public void appointmentDataTransfer(appointments appointmentData){
         selectedAppointment = appointmentData;
@@ -542,6 +582,10 @@ public class updateAppointmentController {
 
     }
 
+    /** This is the addAppointmentController initialize method.
+     This method is created when the application is launched.
+     This method ensures that the combo boxes for adding appointment times, dates, contact, customerID, and userID are populated.
+     */
     @FXML
     void initialize() {
 

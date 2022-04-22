@@ -31,7 +31,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.Arrays;
 import java.util.ResourceBundle;
-
+/**This class is the controller for the reports.fxml view*/
 public class reportsController implements Initializable {
 
     @FXML
@@ -116,6 +116,10 @@ public class reportsController implements Initializable {
     Parent scene;
 
 
+    /**Observable list method for getting the data form the appointments table from the database.
+     This will fill the ObservableList appointmentList with the info from the appointments table and return the ObservableList appointmentList.
+     @return Returns the ObservableList appointmentList.
+     */
     //Observable list method for getting the data from the database for the GUI appointment table
     public ObservableList<appointments> appointmentList(){
         ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
@@ -163,6 +167,10 @@ public class reportsController implements Initializable {
 
     }
 
+    /**Observable list method for getting the data form the contacts table from the database.
+     This will fill the ObservableList contactList with the info from the contacts table and return the ObservableList contactList.
+     @return Returns the ObservableList contactList.
+     */
     //Observable list method for getting the data from the database for the GUI contact combo box
     public ObservableList<contacts> contactList(){
         ObservableList <contacts> contactList = FXCollections.observableArrayList();
@@ -192,6 +200,10 @@ public class reportsController implements Initializable {
 
     }
 
+    /**Observable list method for getting the data form the users table from the database.
+     This will fill the ObservableList userList with the info from the users table and return the ObservableList userList.
+     @return Returns the ObservableList userList.
+     */
     //Observable list method for getting the data from the database for the GUI user combo box
     public ObservableList<users> userList(){
         ObservableList <users> userList = FXCollections.observableArrayList();
@@ -227,6 +239,12 @@ public class reportsController implements Initializable {
 
     }
 
+    /** This is the onAction for the Go button for typeAppointments table.
+     When this Go button is clicked, the typeAppointment Table is filtered by the selections made in the type and month combo boxes.
+     In the future, have this allow users to filter the table by either type or month and have a clear function for the combo boxes.
+     <p><b>
+     The Lambda expression to set countLbl text called from the interface reports.
+     */
     @FXML
     void onActionAppointmentTypeGoBtn (ActionEvent event){
 
@@ -249,6 +267,9 @@ public class reportsController implements Initializable {
 
     }
 
+    /** This is the onAction for the Go button for contact table.
+     When this Go button is clicked, the contact Table is filtered by the selections made in the contact combo boxes.
+     */
     @FXML
     void onActionContactGoBtn (ActionEvent event){
         //Creates an empty list
@@ -265,6 +286,9 @@ public class reportsController implements Initializable {
         contactTableView.setItems(contactAppointments);
     }
 
+    /** This is the onAction for the Go button for user table.
+     When this Go button is clicked, the user Table is filtered by the selections made in the user combo boxes.
+     */
     @FXML
     void onActionUserGoBtn (ActionEvent event){
 
@@ -282,6 +306,9 @@ public class reportsController implements Initializable {
         userTableView.setItems(userAppointments);
     }
 
+    /** This is the onAction for the reports Back Button.
+     When the Back button is clicked, the user is redirected to the appointmentCalendar.
+     */
     @FXML
     void onActionBackBtn (ActionEvent event) throws IOException {
 
@@ -291,6 +318,10 @@ public class reportsController implements Initializable {
         stage.show();//actually causes the stage to appear
     }
 
+    /**This is the monthList ObservableList Method.
+     Creates a method that returns a list of months with the month data type.
+     @return Returns the observableList monthList.
+     */
     //Creates a method that returns a list of months with the month data type
     ObservableList<Month> monthList(){
         ObservableList<Month>monthList = FXCollections.observableArrayList();
@@ -306,6 +337,12 @@ public class reportsController implements Initializable {
         return monthList;
     }
 
+    /** This is the reportsController initialize method.
+     This method is created when the application is launched.
+     This method ensures that the combo boxes for filtering by type and month, contact, and users are populated.
+     <p><b>
+     The Lambda expression to set countLbl text called from the interface reports.
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         //Arrays.asList("January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December")

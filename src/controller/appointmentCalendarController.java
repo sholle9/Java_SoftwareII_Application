@@ -26,7 +26,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import model.appointments;
 import model.customers;
-
+/**This class is the controller for the appointmentCalendar.fxml view*/
 public class appointmentCalendarController implements Initializable {
 
 
@@ -111,6 +111,10 @@ public class appointmentCalendarController implements Initializable {
     Stage stage;
     Parent scene;
 
+    /**Observable list method for getting the data form the appointments table from the database.
+     This will fill the ObservableList appointmentList with the info from the appointments table and return the ObservableList appointmentList.
+     @return Returns the ObservableList appointmentList.
+     */
     //Observable list method for getting the data from the database for the GUI appointment table
     public ObservableList<appointments> appointmentList(){
         ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
@@ -158,6 +162,10 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    /**Observable list method for getting the data form the customers table from the database.
+     This will fill the ObservableList customerList with the info from the customers table and return the ObservableList customerList.
+     @return Returns the ObservableList customerList.
+     */
     //Observable list method for getting the data from the database for the GUI appointment table
     public ObservableList<customers> customerList(){
         ObservableList <customers> customerList = FXCollections.observableArrayList();
@@ -195,6 +203,9 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    /** This is the onAction for the Reports Button.
+     When the Reports button is clicked, the user is redirected to the reports screen.
+     */
     public void onActionReportsBtn(ActionEvent event) throws IOException {
         stage = (Stage) ((Button) event.getSource()).getScene().getWindow();
         scene = FXMLLoader.load(getClass().getResource("/view/reports.fxml"));
@@ -202,6 +213,9 @@ public class appointmentCalendarController implements Initializable {
         stage.show();
     }
 
+    /** This is the onAction for the Add Button under the appointments table on the appointmentCalendar screen.
+     When this Add button is clicked, the user is redirected to the addAppointment screen.
+     */
     @FXML
     void onActionAddAppointment(ActionEvent event) throws IOException {
 
@@ -212,6 +226,9 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    /** This is the onAction for the Add Button under the customers table on the appointmentCalendar screen.
+     When this Add button is clicked, the user is redirected to the addCustomer screen.
+     */
     @FXML
     void onActionAddCustomer(ActionEvent event) throws IOException {
 
@@ -222,6 +239,9 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    /** This is the onAction for the Logout Button above the appointments table on the appointmentCalendar screen.
+     When this Logout button is clicked, the user is redirected to the loginMenu screen.
+     */
     @FXML
     void onActionLogout(ActionEvent event) throws IOException {
 
@@ -232,6 +252,10 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    /** This is the onAction for the Update Button under the appointments table on the appointmentCalendar screen.
+     When this Update button is clicked, the user is redirected to the updateAppointment screen.
+     This is where the appointmentDataTransfer method from the updateAppointmentController is called.
+     */
     @FXML
     void onActionUpdateAppointment(ActionEvent event) throws IOException {
 
@@ -264,6 +288,10 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    /** This is the onAction for the Update Button under the customers table on the appointmentCalendar screen.
+     When this Update button is clicked, the user is redirected to the updateCustomer screen.
+     This is where the customerDataTransfer method from the updateCustomerController is called.
+     */
     @FXML
     void onActionUpdateCustomer(ActionEvent event) throws IOException {
 
@@ -296,6 +324,11 @@ public class appointmentCalendarController implements Initializable {
 
     }
 
+    /** This is the onAction method for when the WeeklyView Radio Button on the appointmentCalendar screen.
+     When the Radio Button WeeklyView is selected, the appointmentTableView Table displays the appointment info for all the appointments in the ObservableList weeklyAppointments.
+     The observableList weeklyAppointments only fills with appointments that falls within 7 days starting from today's date.
+     In the future, have this as a dynamic with the option of what week the user wishes to look at not just the upcoming week.
+     */
     //This will show the next 7 days from the current date for a weekly view when the Weekly View radio button is selected
     public void onActionWeeklyView(ActionEvent actionEvent) {
 
@@ -314,6 +347,11 @@ public class appointmentCalendarController implements Initializable {
         appointmentTableView.setItems(weeklyAppointments);//displays the weekly dates in the table view
     }
 
+    /** This is the onAction method for when the MonthlyView Radio Button on the appointmentCalendar screen.
+     When the Radio Button allAppointments is selected, the appointmentTableView Table displays the appointment info for all the appointments in the ObservableList monthlyAppointments.
+     The observableList monthlyAppointments only fills with appointments that have the same month and year as today's date.
+     In the future, have this as a dynamic with the option of what month the user wishes to look at not just the current month.
+     */
     //This will show the monthly view using the month of the current date when the Monthly View radio button is selected
     public void onActionMonthlyView(ActionEvent actionEvent) {
         ObservableList<appointments> monthlyAppointments = FXCollections.observableArrayList();//Creates an empty observable list for the monthly dates to be added to
@@ -331,14 +369,19 @@ public class appointmentCalendarController implements Initializable {
         appointmentTableView.setItems(monthlyAppointments);//displays the monthly dates in the table view
     }
 
+    /** This is the onAction method for when the allAppointments Radio Button on the appointmentCalendar screen.
+     When the Radio Button allAppointments is selected, the appointmentTableView Table displays the appointment info for all the appointments in the ObservableList allAppointments.
+     */
     //Allows for a view of all Appointments in the db
     public void onActionAllAppointmentView(ActionEvent actionEvent) {
         ObservableList<appointments> allAppointments = appointmentList();
         appointmentTableView.setItems(allAppointments);
     }
 
-
-
+    /** This is the appointmentCalendarController initialize method.
+     This method is created when the application is launched.
+     This method ensures that the table view for appointments and customers are populated.
+     */
     @FXML
     public void initialize(URL location, ResourceBundle resources) {
 

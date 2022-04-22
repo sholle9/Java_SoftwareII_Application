@@ -27,7 +27,7 @@ import javafx.stage.Stage;
 import lambdaExpressionInterfaces.loginMenu;
 import model.appointments;
 import model.users;
-
+/**This class is the controller for the loginMenu.fxml view*/
 public class loginMenuController implements Initializable {
 
     @FXML
@@ -68,6 +68,10 @@ public class loginMenuController implements Initializable {
     Parent scene;
 
 
+    /**Observable list method for getting the data form the appointments table from the database.
+     This will fill the ObservableList appointmentList with the info from the appointments table and return the ObservableList appointmentList.
+     @return Returns the ObservableList appointmentList.
+     */
     //Observable list method for getting the data from the database
     public ObservableList<appointments> appointmentList(){
         ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
@@ -115,6 +119,10 @@ public class loginMenuController implements Initializable {
 
     }
 
+    /**Observable list method for getting the data form the users table from the database.
+     This will fill the ObservableList userList with the info from the users table and return the ObservableList userList.
+     @return Returns the ObservableList userList.
+     */
     //Observable list method for getting the data from the database
     public ObservableList<users> usersList(){
         ObservableList <users> usersList = FXCollections.observableArrayList();
@@ -152,6 +160,9 @@ public class loginMenuController implements Initializable {
 
     }
 
+    /** This is the onAction for the Close Button.
+     When the Close button is clicked, the program is closed.
+     */
     @FXML
     void onActionCloseProgram(ActionEvent event)  {
 
@@ -161,6 +172,11 @@ public class loginMenuController implements Initializable {
 
     }
 
+    /** This is the onAction method for the Login button.
+     When the Login button is clicked, the information entered in the text fields are checked against the users table in the database.
+     The try/catch method is used to create an error message asking for correct values.
+     If/else statements are used to make sure that username and password match with the information found in the users table.
+     */
     @FXML
     void onActionLogin(ActionEvent event) throws IOException {
 
@@ -302,6 +318,12 @@ public class loginMenuController implements Initializable {
 
     }
 
+    /** This is the loginMenuController initialize method.
+     This method is created when the application is launched.
+     This method ensures that the labels and error dialog boxes will populate in the user's system default language.
+     <p><b>
+     The Lambda Expression that displays the location of the system in a label using the interface loginMenu.
+     */
     @Override
     public void initialize(URL url, ResourceBundle ResourceBundle) {
 

@@ -25,7 +25,7 @@ import model.appointments;
 import model.contacts;
 import model.customers;
 import model.users;
-
+/**This class is the controller for the addAppointments.fxml view.*/
 public class addAppointmentController {
 
     @FXML
@@ -73,6 +73,9 @@ public class addAppointmentController {
     Stage stage;
     Parent scene;
 
+    /** This is the onAction for the addAppointment Cancel Button.
+     When the cancel button is clicked, the user is redirected to the appointmentCalendar without saving the inputted info.
+     */
     @FXML
     void onActionCancelToCalendar(ActionEvent event) throws IOException {
 
@@ -83,6 +86,10 @@ public class addAppointmentController {
 
     }
 
+    /**Observable list method for getting the data form the appointments table from the database.
+     This will fill the ObservableList appointmentList with the info from the appointments table and return the ObservableList appointmentList.
+     @return Returns the ObservableList appointmentList.
+     */
     //Observable list method for getting the data from the database
     public ObservableList<appointments> appointmentList(){
         ObservableList <appointments> appointmentList = FXCollections.observableArrayList();
@@ -128,6 +135,11 @@ public class addAppointmentController {
 
     }
 
+    /** This is the onAction method for the Save button.
+     When the Save button is clicked, the information entered in the text fields (except the id field) are inserted into the appointments table in the database.
+     An IOException occurs if no values or incorrect values are entered. The try/catch method is used to create an error message asking for correct values.
+     If/else statements are used to make sure that date and time are within the business hours and at a future/ current time.
+     */
     @FXML
     void onActionSaveNewAppointment(ActionEvent event) throws IOException {
 
@@ -286,6 +298,10 @@ public class addAppointmentController {
 
     }
 
+    /**Observable list method for getting the data form the contacts table from the database.
+     This will fill the ObservableList contactList with the info from the contacts table and return the ObservableList contactList.
+     @return Returns the ObservableList contactList.
+     */
     //Observable list method for getting the data from the database for the GUI contact combo box
     public ObservableList<contacts> contactList(){
         ObservableList <contacts> contactList = FXCollections.observableArrayList();
@@ -315,6 +331,10 @@ public class addAppointmentController {
 
     }
 
+    /**Observable list method for getting the data form the users table from the database.
+     This will fill the ObservableList userList with the info from the users table and return the ObservableList userList.
+     @return Returns the ObservableList userList.
+     */
     //Observable list method for getting the data from the database for the GUI user combo box
     public ObservableList<users> userList(){
         ObservableList <users> userList = FXCollections.observableArrayList();
@@ -350,6 +370,10 @@ public class addAppointmentController {
 
     }
 
+    /**Observable list method for getting the data form the customers table from the database.
+     This will fill the ObservableList customerList with the info from the customers table and return the ObservableList customerList.
+     @return Returns the ObservableList customerList.
+     */
     //Observable list method for getting the data from the database for the GUI contact combo box
     public ObservableList<customers> customerList(){
         ObservableList <customers> customerList = FXCollections.observableArrayList();
@@ -386,6 +410,10 @@ public class addAppointmentController {
 
     }
 
+    /**This is the startTimeList ObservableList Method.
+     This observableList populates times from 8am to 10pm in EST in military time in 15 minute increments and adds them to the ObservableList startTimeList.
+     @return Returns the observableList startTimeList.
+     */
     //This observable list populates times from 8am to 10pm in EST in military time in 15 minute increments
     ObservableList<LocalTime> startTimeList() {
 
@@ -403,6 +431,10 @@ public class addAppointmentController {
         return startTimeList;
     }
 
+    /**This is the startDateList ObservableList Method.
+     This observableList populates dates from today till end of 2023 and adds them to the ObservableList startDateList.
+     @return Returns the observableList startDateList.
+     */
     //This observable list populates dates from today till end of 2023
     ObservableList<LocalDate> startDateList(){
         ObservableList<LocalDate>startDateList = FXCollections.observableArrayList();
@@ -415,6 +447,11 @@ public class addAppointmentController {
         }
         return startDateList;
     }
+
+    /** This is the addAppointmentController initialize method.
+     This method is created when the application is launched.
+     This method ensures that the combo boxes for adding appointment times, dates, contact, customerID, and userID are populated.
+     */
     @FXML
     void initialize() {
         ObservableList<users> allUsers = userList();//call the userList method which will pull from the database

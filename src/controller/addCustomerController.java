@@ -25,7 +25,7 @@ import model.appointments;
 import model.countries;
 import model.customers;
 import model.firstLevelDivision;
-
+/**This class is the controller for the addCustomer.fxml view*/
 public class addCustomerController {
 
     @FXML
@@ -64,6 +64,9 @@ public class addCustomerController {
     Stage stage;
     Parent scene;
 
+    /** This is the onAction for the addCustomer Cancel Button.
+     When the cancel button is clicked, the user is redirected to the appointmentCalendar without saving the inputted info.
+     */
     @FXML
     void onActionCancelToCalendar(ActionEvent event) throws IOException {
 
@@ -74,6 +77,11 @@ public class addCustomerController {
 
     }
 
+    /** This is the onAction method for the Save button.
+     When the Save button is clicked, the information entered in the text fields (except the id field) are inserted into the customers table in the database.
+     An IOException occurs if no values or incorrect values are entered. The try/catch method is used to create an error message asking for correct values.
+     If/else statements are used to make sure that fields are filled out.
+     */
     @FXML
     void onActionSaveNewCustomer(ActionEvent event) throws IOException {
 
@@ -147,6 +155,10 @@ public class addCustomerController {
 
     }
 
+    /**Observable list method for getting the data form the first_level_divisions table from the database.
+     This will fill the ObservableList divisionList with the info from the first_level_divisions table and return the ObservableList divisionList.
+     @return Returns the ObservableList divisionList.
+     */
     //Observable list method for getting the data from the database for the GUI stateProv combo box
     public ObservableList<firstLevelDivision> divisionList(){
         ObservableList<firstLevelDivision> divisionList = FXCollections.observableArrayList();
@@ -177,6 +189,10 @@ public class addCustomerController {
         return divisionList;
     }
 
+    /**Observable list method for getting the data form the first_level_divisions table from the database.
+     This will fill the ObservableList statesList with the info from the first_level_divisions table WHERE Country_ID = 1 and adds the division to the ObservableList statesList.
+     @return Returns the ObservableList statesList.
+     */
     //This creates a list of only the states that have countryID 1 for the US
     public ObservableList<firstLevelDivision> statesList(){
         ObservableList<firstLevelDivision> statesList = FXCollections.observableArrayList();
@@ -207,6 +223,10 @@ public class addCustomerController {
         return statesList;
     }
 
+    /**Observable list method for getting the data form the first_level_divisions table from the database.
+     This will fill the ObservableList ukList with the info from the first_level_divisions table WHERE Country_ID = 2 and adds the division to the ObservableList ukList.
+     @return Returns the ObservableList ukList.
+     */
     //This creates a list of only the providences that have countryID 2 for the UK
     public ObservableList<firstLevelDivision> ukList(){
         ObservableList<firstLevelDivision> ukList = FXCollections.observableArrayList();
@@ -237,6 +257,10 @@ public class addCustomerController {
         return ukList;
     }
 
+    /**Observable list method for getting the data form the first_level_divisions table from the database.
+     This will fill the ObservableList canadaList with the info from the first_level_divisions table WHERE Country_ID = 3 and adds the division to the ObservableList canadaList.
+     @return Returns the ObservableList canadaList.
+     */
     //This creates a list of only the providences that have countryID 3 for the Canada
     public ObservableList<firstLevelDivision> canadaList(){
         ObservableList<firstLevelDivision> canadaList = FXCollections.observableArrayList();
@@ -267,6 +291,10 @@ public class addCustomerController {
         return canadaList;
     }
 
+    /**Observable list method for getting the data form the countries table from the database.
+     This will fill the ObservableList countryList with the info from the countries table and adds the country to the ObservableList countryList.
+     @return Returns the ObservableList countryList.
+     */
     //Observable list method for getting the data from the database for the GUI country combo box
     public ObservableList<countries> countryList(){
         ObservableList <countries> countryList = FXCollections.observableArrayList();
@@ -294,6 +322,11 @@ public class addCustomerController {
         return countryList;
 
     }
+
+    /**This is the onAction method for the country combo box.
+     When a country is selected, the stateProv combo box is populated with the list of states or providences that associate with the country ID.
+     In the future, make it so that the stateProv combo box doesn't clear its result if the selected state or providence that matches the country.
+     */
     @FXML
     void onActionCountry(ActionEvent event) {
         ObservableList<firstLevelDivision> allDivisions = divisionList();//call the divisionList method which will pull from the database
@@ -324,12 +357,10 @@ public class addCustomerController {
 
     }
 
-    @FXML
-    void onActionStateProv(ActionEvent event) {
-
-    }
-
-
+    /** This is the addCustomerController initialize method.
+     This method is created when the application is launched.
+     This method ensures that the combo boxes for adding customer stateProv and country are populated.
+     */
     @FXML
     void initialize() {
 
